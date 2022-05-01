@@ -42,13 +42,13 @@ public class Frame {
                         firstRoll.stream(),
                         secondRoll.stream()),
                         thirdRoll.stream())
-                .map(roll->roll.getPins())
+                .map(Roll::getPins)
                 .reduce(Integer::sum);
     }
 
 
     interface Status {
-        public Optional<Status> getNextStatus();
+        Optional<Status> getNextStatus();
 
         void handle(Roll roll);
 
@@ -60,7 +60,13 @@ public class Frame {
 
     private class Empty implements Status {
         public Optional<Status> getNextStatus() {
-            return Optional.of(new FirstRoll());
+            Optional<Integer> partialScore = getPartialScore();
+            if (partialScore.isEmpty()) {
+                return Optional.empty();
+            }
+            return partialScore.get().equals(10)
+                    ? Optional.of(new Strike())
+                    : Optional.of(new FirstRoll());
         }
 
         @Override
@@ -158,6 +164,71 @@ public class Frame {
         @Override
         public void handle(Roll roll) {
 
+        }
+
+        @Override
+        public Optional<Integer> getScore() {
+            return getPartialScore();
+        }
+
+        @Override
+        public void passNext(Roll roll) {
+            nextFrame.ifPresent(frame -> frame.add(roll));
+        }
+    }
+
+    private class Strike implements Status {
+        @Override
+        public Optional<Status> getNextStatus() {
+            return Optional.of(new StrikeWitOneBonus());
+        }
+
+        @Override
+        public void handle(Roll roll) {
+            secondRoll = Optional.of(roll);
+        }
+
+        @Override
+        public Optional<Integer> getScore() {
+            return Optional.empty();
+        }
+
+        @Override
+        public void passNext(Roll roll) {
+            nextFrame.ifPresent(frame -> frame.add(roll));
+        }
+    }
+
+    private class StrikeWitOneBonus implements Status {
+        @Override
+        public Optional<Status> getNextStatus() {
+            return Optional.of(new StrikeWithTwoBonuses());
+        }
+
+        @Override
+        public void handle(Roll roll) {
+            thirdRoll = Optional.of(roll);
+        }
+
+        @Override
+        public Optional<Integer> getScore() {
+            return Optional.empty();
+        }
+
+        @Override
+        public void passNext(Roll roll) {
+            nextFrame.ifPresent(frame -> frame.add(roll));
+        }
+    }
+
+    private class StrikeWithTwoBonuses implements Status {
+        @Override
+        public Optional<Status> getNextStatus() {
+            return Optional.empty();
+        }
+
+        @Override
+        public void handle(Roll roll) {
         }
 
         @Override

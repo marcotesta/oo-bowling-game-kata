@@ -53,4 +53,9 @@ public class FrameTest {
         addRolls(new int[]{10, 4, 3});
         assertEquals(24, game.getScore());
     }
+    @Test
+    void testGame() {
+        addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
+        assertEquals(156, game.getScore());
+    }
 }
