@@ -4,10 +4,7 @@ package org.mondogrua;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class FrameTest {
@@ -22,6 +19,10 @@ public class FrameTest {
     @BeforeEach
     void setUp() {
         game = new Game();
+    }
+    @Test
+    void testNoRoll() {
+        assertEquals(0, game.getScore());
     }
 
     @Test
@@ -42,4 +43,14 @@ public class FrameTest {
         assertEquals(13, game.getScore());
     }
 
+    @Test
+    void testSpare() {
+        addRolls(new int[]{6, 4, 3, 2});
+        assertEquals(18, game.getScore());
+    }
+    @Test
+    void testStrike() {
+        addRolls(new int[]{10, 4, 3});
+        assertEquals(24, game.getScore());
+    }
 }
