@@ -19,15 +19,15 @@ public class Frame {
     public void add(Roll roll) {
         status.handle(roll);
         status.passNext(roll);
-        setStatus(status.getNextStatus());
+        status.setNextStatus();
     }
 
     public Optional<Integer> getScore() {
         return status.getScore();
     }
 
-    void setStatus(Optional<Status> optionalStatus) {
-        optionalStatus.ifPresent(status -> this.status = status);
+    void setStatus(Status status) {
+        this.status = status;
     }
 
     public void addScore(ScoreAccumulator scoreAcc) {
@@ -48,9 +48,9 @@ public class Frame {
 
 
     interface Status {
-        Optional<Status> getNextStatus();
+        default void setNextStatus() {}
 
-        void handle(Roll roll);
+        default void handle(Roll roll) {}
 
         Optional<Integer> getScore();
 
@@ -59,14 +59,15 @@ public class Frame {
     }
 
     private class Empty implements Status {
-        public Optional<Status> getNextStatus() {
+        public void setNextStatus() {
             Optional<Integer> partialScore = getPartialScore();
             if (partialScore.isEmpty()) {
-                return Optional.empty();
+                return;
             }
-            return partialScore.get().equals(10)
-                    ? Optional.of(new Strike())
-                    : Optional.of(new FirstRoll());
+            Status nextStatus = partialScore.get().equals(10)
+                    ? new Strike()
+                    : new FirstRoll();
+            setStatus(nextStatus);
         }
 
         @Override
@@ -87,14 +88,15 @@ public class Frame {
     private class FirstRoll implements Status {
 
         @Override
-        public Optional<Status> getNextStatus() {
+        public void setNextStatus() {
             Optional<Integer> partialScore = getPartialScore();
             if (partialScore.isEmpty()) {
-                return Optional.empty();
+                return;
             }
-            return partialScore.get().equals(10)
-                    ? Optional.of(new Spare())
-                    : Optional.of(new Open());
+            Status nextStatus = partialScore.get().equals(10)
+                    ? new Spare()
+                    : new Open();
+            setStatus(nextStatus);
         }
 
         @Override
@@ -113,14 +115,6 @@ public class Frame {
     }
 
     private class Open implements Status {
-        @Override
-        public Optional<Status> getNextStatus() {
-            return Optional.empty();
-        }
-
-        @Override
-        public void handle(Roll roll) {
-        }
 
         @Override
         public Optional<Integer> getScore() {
@@ -135,8 +129,8 @@ public class Frame {
 
     private class Spare implements Status {
         @Override
-        public Optional<Status> getNextStatus() {
-            return Optional.of(new SpareWithBonus());
+        public void setNextStatus() {
+            setStatus( new SpareWithBonus());
         }
 
         @Override
@@ -157,16 +151,6 @@ public class Frame {
 
     private class SpareWithBonus implements Status {
         @Override
-        public Optional<Status> getNextStatus() {
-            return Optional.empty();
-        }
-
-        @Override
-        public void handle(Roll roll) {
-
-        }
-
-        @Override
         public Optional<Integer> getScore() {
             return getPartialScore();
         }
@@ -179,8 +163,8 @@ public class Frame {
 
     private class Strike implements Status {
         @Override
-        public Optional<Status> getNextStatus() {
-            return Optional.of(new StrikeWitOneBonus());
+        public void setNextStatus() {
+            setStatus( new StrikeWitOneBonus());
         }
 
         @Override
@@ -201,8 +185,8 @@ public class Frame {
 
     private class StrikeWitOneBonus implements Status {
         @Override
-        public Optional<Status> getNextStatus() {
-            return Optional.of(new StrikeWithTwoBonuses());
+        public void setNextStatus() {
+            setStatus(new StrikeWithTwoBonuses());
         }
 
         @Override
@@ -222,15 +206,6 @@ public class Frame {
     }
 
     private class StrikeWithTwoBonuses implements Status {
-        @Override
-        public Optional<Status> getNextStatus() {
-            return Optional.empty();
-        }
-
-        @Override
-        public void handle(Roll roll) {
-        }
-
         @Override
         public Optional<Integer> getScore() {
             return getPartialScore();
