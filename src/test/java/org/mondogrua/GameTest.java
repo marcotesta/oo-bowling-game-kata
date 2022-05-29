@@ -4,6 +4,8 @@ package org.mondogrua;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -23,41 +25,41 @@ public class GameTest {
 
     @Test
     void testScoreGivenNoRolls() {
-        assertEquals(0, game.getScore());
+        assertEquals(Optional.empty(), game.getScore());
     }
 
     @Test
     void testScoreGivenOneRoll() {
         addRolls(new int[]{6});
-        assertEquals(0, game.getScore());
+        assertEquals(Optional.empty(), game.getScore());
     }
 
     @Test
     void testScoreGivenOneOpenFrame() {
         addRolls(new int[]{6, 2});
-        assertEquals(8, game.getScore());
+        assertEquals(Optional.of(8), game.getScore());
     }
 
     @Test
     void testScoreGivenTwoOpenFrames() {
         addRolls(new int[]{6, 2, 3, 2});
-        assertEquals(13, game.getScore());
+        assertEquals(Optional.of(13), game.getScore());
     }
 
     @Test
     void testScoreGivenOneSpare() {
         addRolls(new int[]{6, 4, 3, 2});
-        assertEquals(18, game.getScore());
+        assertEquals(Optional.of(18), game.getScore());
     }
     @Test
     void testScoreGivenOneStrike() {
         addRolls(new int[]{10, 4, 3});
-        assertEquals(24, game.getScore());
+        assertEquals(Optional.of(24), game.getScore());
     }
     @Test
     void testScoreGivenCompletGame() {
         addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
-        assertEquals(156, game.getScore());
+        assertEquals(Optional.of(156), game.getScore());
     }
 
     @Test

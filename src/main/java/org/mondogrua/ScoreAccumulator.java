@@ -9,7 +9,7 @@ public class ScoreAccumulator {
         optionalScore.ifPresent(score -> accumulator += score);
     }
 
-    public Integer value() {
-        return this.accumulator;
+    public Optional<Integer> value() {
+        return accumulator == 0 ? Optional.empty() : Optional.of(this.accumulator);
     }
 }

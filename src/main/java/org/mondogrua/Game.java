@@ -19,7 +19,7 @@ public class Game {
         this.frames[0].add(roll);
     }
 
-    public Integer getScore() {
+    public Optional<Integer> getScore() {
         ScoreAccumulator scoreAccumulator = new ScoreAccumulator();
         frames[0].addScoreTo(scoreAccumulator);
         return scoreAccumulator.value();
