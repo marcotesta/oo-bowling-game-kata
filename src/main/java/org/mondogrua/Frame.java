@@ -170,6 +170,10 @@ public class Frame {
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
+        @Override
+        public Optional<String> getRoll2Report() {
+            return secondRoll.map(roll -> "roll 2: /");
+        }
     }
 
     private class Strike implements Status {
