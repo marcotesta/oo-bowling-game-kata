@@ -246,8 +246,8 @@ public class Frame {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.map(roll -> "" + roll.getPins());
+        public Optional<String> getRoll2Report() {
+            return firstRoll.map(roll -> "X" );
         }
     }
 
@@ -267,8 +267,8 @@ public class Frame {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.map(roll -> "" + roll.getPins());
+        public Optional<String> getRoll2Report() {
+            return firstRoll.map(roll -> "X");
         }
     }
 
@@ -288,8 +288,8 @@ public class Frame {
             partialScore = game.getScore();
         }
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.map(roll -> "" + roll.getPins());
+        public Optional<String> getRoll2Report() {
+            return firstRoll.map(roll -> "X");
         }
 
         public Optional<String> getScoreReport() {

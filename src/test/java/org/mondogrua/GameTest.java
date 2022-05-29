@@ -101,4 +101,9 @@ public class GameTest {
         assertEquals("6, /, score: 13\n" +
                 "3, 2, score: 18", game.getReport());
     }
+    @Test
+    void testReportGivenOneStrikeAndNoBonus() {
+        addRolls(new int[]{10});
+        assertEquals("X", game.getReport());
+    }
 }
