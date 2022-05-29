@@ -70,4 +70,9 @@ public class GameTest {
         addRolls(new int[]{6});
         assertEquals("roll 1: 6", game.getReport());
     }
+    @Test
+    void testReportGivenOneOpenFrame() {
+        addRolls(new int[]{6, 2});
+        assertEquals("roll 1: 6, roll 2: 2, score: 8", game.getReport());
+    }
 }

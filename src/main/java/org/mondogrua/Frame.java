@@ -129,6 +129,17 @@ public class Frame {
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
+
+        public Optional<String> getReport() {
+            Optional<String> roll1Report =  firstRoll.map(roll -> "roll 1: " + roll.getPins());
+            Optional<String> roll2Report =  secondRoll.map(roll -> "roll 2: " + roll.getPins());
+            Optional<String> scoreReport =  getScore().map(score -> "score: " + score);
+            return Stream.of(roll1Report, roll2Report, scoreReport)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .filter(value -> !value.isEmpty())
+                    .reduce((first, second) -> first +", "+second);
+        }
     }
 
     private class Spare implements Status {
