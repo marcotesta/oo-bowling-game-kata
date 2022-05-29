@@ -20,41 +20,42 @@ public class GameTest {
     void setUp() {
         game = new Game();
     }
+
     @Test
-    void testNoRoll() {
+    void testScoreGivenNoRolls() {
         assertEquals(0, game.getScore());
     }
 
     @Test
-    void testAddRoll() {
+    void testScoreGivenOneRoll() {
         addRolls(new int[]{6});
         assertEquals(0, game.getScore());
     }
 
     @Test
-    void testAdd2RollsOpenFramework() {
+    void testScoreGivenOneOpenFrame() {
         addRolls(new int[]{6, 2});
         assertEquals(8, game.getScore());
     }
 
     @Test
-    void testAdd4RollsBothFramesOpen() {
+    void testScoreGivenTwoOpenFrames() {
         addRolls(new int[]{6, 2, 3, 2});
         assertEquals(13, game.getScore());
     }
 
     @Test
-    void testSpare() {
+    void testScoreGivenOneSpare() {
         addRolls(new int[]{6, 4, 3, 2});
         assertEquals(18, game.getScore());
     }
     @Test
-    void testStrike() {
+    void testScoreGivenOneStrike() {
         addRolls(new int[]{10, 4, 3});
         assertEquals(24, game.getScore());
     }
     @Test
-    void testGame() {
+    void testScoreGivenCompletGame() {
         addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
         assertEquals(156, game.getScore());
     }
