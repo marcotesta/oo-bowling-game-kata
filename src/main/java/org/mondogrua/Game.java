@@ -21,7 +21,7 @@ public class Game {
 
     public Integer getScore() {
         ScoreAccumulator scoreAccumulator = new ScoreAccumulator();
-        frames[0].addScore(scoreAccumulator);
+        frames[0].addScoreTo(scoreAccumulator);
         return scoreAccumulator.value();
     }
 }

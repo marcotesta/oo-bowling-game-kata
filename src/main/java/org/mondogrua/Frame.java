@@ -30,10 +30,10 @@ public class Frame {
         this.status = status;
     }
 
-    public void addScore(ScoreAccumulator scoreAcc) {
+    public void addScoreTo(ScoreAccumulator scoreAcc) {
         Optional<Integer> optonalScore = getScore();
         scoreAcc.add(optonalScore);
-        nextFrame.ifPresent(frame -> frame.addScore(scoreAcc));
+        nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
     }
 
     Optional<Integer> getPins() {
