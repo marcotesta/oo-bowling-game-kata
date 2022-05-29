@@ -61,9 +61,12 @@ public class Frame {
 
         default void handle(Roll roll) {}
 
-        Optional<Integer> getScore();
+        default Optional<Integer> getScore() {
+            return Optional.empty();
+        }
 
-        void passNext(Roll roll);
+        default void passNext(Roll roll) {
+        }
 
         default Optional<String> getReport() {
             return Optional.empty();
@@ -87,14 +90,7 @@ public class Frame {
             firstRoll = Optional.of(roll);
         }
 
-        @Override
-        public Optional<Integer> getScore() {
-            return Optional.empty();
-        }
 
-        @Override
-        public void passNext(Roll roll) {
-        }
     }
 
     private class FirstRoll implements Status {
@@ -117,13 +113,6 @@ public class Frame {
         }
 
         @Override
-        public Optional<Integer> getScore() {
-            return Optional.empty();
-        }
-
-        @Override
-        public void passNext(Roll roll) {
-        }
         public Optional<String> getReport() {
             return firstRoll.map(roll -> "roll 1: " + roll.getPins());
         }
@@ -151,11 +140,6 @@ public class Frame {
         @Override
         public void handle(Roll roll) {
             thirdRoll = Optional.of(roll);
-        }
-
-        @Override
-        public Optional<Integer> getScore() {
-            return Optional.empty();
         }
 
         @Override
@@ -188,11 +172,6 @@ public class Frame {
         }
 
         @Override
-        public Optional<Integer> getScore() {
-            return Optional.empty();
-        }
-
-        @Override
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
@@ -207,11 +186,6 @@ public class Frame {
         @Override
         public void handle(Roll roll) {
             thirdRoll = Optional.of(roll);
-        }
-
-        @Override
-        public Optional<Integer> getScore() {
-            return Optional.empty();
         }
 
         @Override
