@@ -22,18 +22,18 @@ public class Frame {
         status.setNextStatus();
     }
 
-    public Optional<Integer> getScore() {
+    public void addScoreTo(ScoreAccumulator scoreAcc) {
+        Optional<Integer> optonalScore = getScore();
+        scoreAcc.add(optonalScore);
+        nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
+    }
+
+    private Optional<Integer> getScore() {
         return status.getScore();
     }
 
     private void setStatus(Status status) {
         this.status = status;
-    }
-
-    void addScoreTo(ScoreAccumulator scoreAcc) {
-        Optional<Integer> optonalScore = getScore();
-        scoreAcc.add(optonalScore);
-        nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
     }
 
     private Optional<Integer> getPins() {
@@ -45,7 +45,6 @@ public class Frame {
                 .map(Roll::getPins)
                 .reduce(Integer::sum);
     }
-
 
     interface Status {
         default void setNextStatus() {}
