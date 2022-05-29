@@ -36,7 +36,7 @@ public class Frame {
         nextFrame.ifPresent(frame -> frame.addScore(scoreAcc));
     }
 
-    Optional<Integer> getPartialScore() {
+    Optional<Integer> getPins() {
         return Stream.concat(
                 Stream.concat(
                         firstRoll.stream(),
@@ -60,11 +60,11 @@ public class Frame {
 
     private class Empty implements Status {
         public void setNextStatus() {
-            Optional<Integer> partialScore = getPartialScore();
-            if (partialScore.isEmpty()) {
+            Optional<Integer> pins = getPins();
+            if (pins.isEmpty()) {
                 return;
             }
-            Status nextStatus = partialScore.get().equals(10)
+            Status nextStatus = pins.get().equals(10)
                     ? new Strike()
                     : new FirstRoll();
             setStatus(nextStatus);
@@ -89,11 +89,11 @@ public class Frame {
 
         @Override
         public void setNextStatus() {
-            Optional<Integer> partialScore = getPartialScore();
-            if (partialScore.isEmpty()) {
+            Optional<Integer> pins = getPins();
+            if (pins.isEmpty()) {
                 return;
             }
-            Status nextStatus = partialScore.get().equals(10)
+            Status nextStatus = pins.get().equals(10)
                     ? new Spare()
                     : new Open();
             setStatus(nextStatus);
@@ -118,7 +118,7 @@ public class Frame {
 
         @Override
         public Optional<Integer> getScore() {
-            return getPartialScore();
+            return getPins();
         }
 
         @Override
@@ -152,7 +152,7 @@ public class Frame {
     private class SpareWithBonus implements Status {
         @Override
         public Optional<Integer> getScore() {
-            return getPartialScore();
+            return getPins();
         }
 
         @Override
@@ -208,7 +208,7 @@ public class Frame {
     private class StrikeWithTwoBonuses implements Status {
         @Override
         public Optional<Integer> getScore() {
-            return getPartialScore();
+            return getPins();
         }
 
         @Override
