@@ -8,7 +8,10 @@ public class ReportAccumulator {
     private String accumulator = "";
 
     public void add(Optional<String> optionalReport) {
-        optionalReport.ifPresent(report -> accumulator += report);
+        optionalReport.ifPresent(report -> {
+            if (accumulator.length() > 0) accumulator += "\n";
+            accumulator += report;
+        });
     }
 
     public String value() {
