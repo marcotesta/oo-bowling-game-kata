@@ -64,4 +64,10 @@ public class GameTest {
     void testReportGivenNoRolls() {
         assertEquals("", game.getReport());
     }
+
+    @Test
+    void testReportGivenOneRoll() {
+        addRolls(new int[]{6});
+        assertEquals("roll 1: 6", game.getReport());
+    }
 }

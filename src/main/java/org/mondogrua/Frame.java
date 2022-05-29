@@ -124,6 +124,9 @@ public class Frame {
         @Override
         public void passNext(Roll roll) {
         }
+        public Optional<String> getReport() {
+            return firstRoll.map(roll -> "roll 1: " + roll.getPins());
+        }
     }
 
     private class Open implements Status {
