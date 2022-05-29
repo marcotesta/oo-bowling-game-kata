@@ -9,7 +9,7 @@ public class Game {
     public Game() {
         Optional<Frame> nextFrame = Optional.empty();
         for (int frameIdx = 9; frameIdx >= 0; frameIdx--) {
-            Frame frame = new Frame(frameIdx+1, nextFrame);
+            Frame frame = new Frame(frameIdx+1, this, nextFrame);
             nextFrame = Optional.of(frame);
             frames[frameIdx] = frame;
         }

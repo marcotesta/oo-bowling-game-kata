@@ -11,8 +11,13 @@ public class Frame {
     private Optional<Roll> thirdRoll = Optional.empty();
     private Status status = new Empty();
 
-    public Frame(int index, Optional<Frame> nextFrame) {
+    private Game game;
+
+    private Optional<Integer> partialScore = Optional.empty();
+
+    public Frame(int index, Game game, Optional<Frame> nextFrame) {
         this.index = index;
+        this.game = game;
         this.nextFrame = nextFrame;
     }
 
@@ -41,12 +46,16 @@ public class Frame {
     public Optional<String> getReport() {
         Optional<String> roll1Report =  firstRoll.map(roll -> "roll 1: " + roll.getPins());
         Optional<String> roll2Report = getRoll2Report();
-        Optional<String> scoreReport =  getScore().map(score -> "score: " + score);
+        Optional<String> scoreReport = getScoreReport();
         return Stream.of(roll1Report, roll2Report, scoreReport)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(value -> !value.isEmpty())
                 .reduce((first, second) -> first +", "+second);
+    }
+
+    private Optional<String> getScoreReport() {
+        return status.getScoreReport();
     }
 
     private Optional<String> getRoll2Report() {
@@ -55,6 +64,7 @@ public class Frame {
 
     private void setStatus(Status status) {
         this.status = status;
+        this.status.setPartialScore();
     }
 
     private Optional<Integer> getPins() {
@@ -76,10 +86,13 @@ public class Frame {
             return Optional.empty();
         }
 
-        default void passNext(Roll roll) {
-        }
+        default void passNext(Roll roll) {}
 
         default Optional<String> getRoll2Report() { return Optional.empty(); }
+
+        default Optional<String> getScoreReport() { return Optional.empty(); }
+
+        default void setPartialScore() {};
     }
 
     private class Empty implements Status {
@@ -137,6 +150,15 @@ public class Frame {
         public Optional<String> getRoll2Report() {
             return secondRoll.map(roll -> "roll 2: " + roll.getPins());
         }
+
+        @Override
+        public void setPartialScore() {
+            partialScore = game.getScore();
+        }
+
+        public Optional<String> getScoreReport() {
+            return partialScore.map(partialScore -> "score: " + partialScore);
+        }
     }
 
     private class Spare implements Status {
@@ -173,6 +195,15 @@ public class Frame {
         @Override
         public Optional<String> getRoll2Report() {
             return secondRoll.map(roll -> "roll 2: /");
+        }
+
+        @Override
+        public void setPartialScore() {
+            partialScore = game.getScore();
+        }
+
+        public Optional<String> getScoreReport() {
+            return partialScore.map(partialScore -> "score: " + partialScore);
         }
     }
 
@@ -219,6 +250,15 @@ public class Frame {
         @Override
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
+        }
+
+        @Override
+        public void setPartialScore() {
+            partialScore = game.getScore();
+        }
+
+        public Optional<String> getScoreReport() {
+            return partialScore.map(partialScore -> "score: " + partialScore);
         }
     }
 }
