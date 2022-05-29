@@ -44,7 +44,7 @@ public class Frame {
     }
 
     public Optional<String> getReport() {
-        Optional<String> roll1Report =  firstRoll.map(roll -> "" + roll.getPins());
+        Optional<String> roll1Report = getRoll1Report();
         Optional<String> roll2Report = getRoll2Report();
         Optional<String> scoreReport = getScoreReport();
         return Stream.of(roll1Report, roll2Report, scoreReport)
@@ -56,6 +56,10 @@ public class Frame {
 
     private Optional<String> getScoreReport() {
         return status.getScoreReport();
+    }
+
+    private Optional<String> getRoll1Report() {
+        return status.getRoll1Report();
     }
 
     private Optional<String> getRoll2Report() {
@@ -87,6 +91,8 @@ public class Frame {
         }
 
         default void passNext(Roll roll) {}
+
+        default Optional<String> getRoll1Report() { return Optional.empty(); }
 
         default Optional<String> getRoll2Report() { return Optional.empty(); }
 
@@ -133,6 +139,11 @@ public class Frame {
         public void handle(Roll roll) {
             secondRoll = Optional.of(roll);
         }
+
+        @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
+        }
     }
 
     private class Open implements Status {
@@ -145,6 +156,10 @@ public class Frame {
         @Override
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
+        }
+        @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
         }
         @Override
         public Optional<String> getRoll2Report() {
@@ -177,6 +192,10 @@ public class Frame {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
         @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
+        }
+        @Override
         public Optional<String> getRoll2Report() {
             return secondRoll.map(roll -> "/");
         }
@@ -191,6 +210,10 @@ public class Frame {
         @Override
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
+        }
+        @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
         }
         @Override
         public Optional<String> getRoll2Report() {
@@ -222,6 +245,10 @@ public class Frame {
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
+        @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
+        }
     }
 
     private class StrikeWitOneBonus implements Status {
@@ -239,6 +266,10 @@ public class Frame {
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
+        @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
+        }
     }
 
     private class StrikeWithTwoBonuses implements Status {
@@ -255,6 +286,10 @@ public class Frame {
         @Override
         public void setPartialScore() {
             partialScore = game.getScore();
+        }
+        @Override
+        public Optional<String> getRoll1Report() {
+            return firstRoll.map(roll -> "" + roll.getPins());
         }
 
         public Optional<String> getScoreReport() {
