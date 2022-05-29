@@ -26,17 +26,17 @@ public class Frame {
         return status.getScore();
     }
 
-    void setStatus(Status status) {
+    private void setStatus(Status status) {
         this.status = status;
     }
 
-    public void addScoreTo(ScoreAccumulator scoreAcc) {
+    void addScoreTo(ScoreAccumulator scoreAcc) {
         Optional<Integer> optonalScore = getScore();
         scoreAcc.add(optonalScore);
         nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
     }
 
-    Optional<Integer> getPins() {
+    private Optional<Integer> getPins() {
         return Stream.concat(
                 Stream.concat(
                         firstRoll.stream(),
