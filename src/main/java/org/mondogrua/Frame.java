@@ -28,8 +28,18 @@ public class Frame {
         nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
     }
 
+    public void addReportTo(ReportAccumulator reportAccumulator) {
+        Optional<String> optionalReport = getReport();
+        reportAccumulator.add(optionalReport);
+        nextFrame.ifPresent(frame -> frame.addReportTo(reportAccumulator));
+    }
+
     private Optional<Integer> getScore() {
         return status.getScore();
+    }
+
+    private Optional<String> getReport() {
+        return status.getReport();
     }
 
     private void setStatus(Status status) {
@@ -55,6 +65,9 @@ public class Frame {
 
         void passNext(Roll roll);
 
+        default Optional<String> getReport() {
+            return Optional.empty();
+        }
     }
 
     private class Empty implements Status {

@@ -59,4 +59,9 @@ public class GameTest {
         addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
         assertEquals(156, game.getScore());
     }
+
+    @Test
+    void testReportGivenNoRolls() {
+        assertEquals("", game.getReport());
+    }
 }

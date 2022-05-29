@@ -24,4 +24,10 @@ public class Game {
         frames[0].addScoreTo(scoreAccumulator);
         return scoreAccumulator.value();
     }
+
+    public String getReport() {
+        ReportAccumulator reportAccumulator = new ReportAccumulator();
+        frames[0].addReportTo(reportAccumulator);
+        return reportAccumulator.value();
+    }
 }
