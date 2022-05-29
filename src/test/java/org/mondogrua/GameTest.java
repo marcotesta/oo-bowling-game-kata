@@ -70,35 +70,35 @@ public class GameTest {
     @Test
     void testReportGivenOneRoll() {
         addRolls(new int[]{6});
-        assertEquals("roll 1: 6", game.getReport());
+        assertEquals("6", game.getReport());
     }
     @Test
     void testReportGivenOneOpenFrame() {
         addRolls(new int[]{6, 2});
-        assertEquals("roll 1: 6, roll 2: 2, score: 8", game.getReport());
+        assertEquals("6, 2, score: 8", game.getReport());
     }
     @Test
     void testReportGivenTwoOpenFrames() {
         addRolls(new int[]{6, 2, 3, 2});
         assertEquals(
-                "roll 1: 6, roll 2: 2, score: 8\n" +
-                "roll 1: 3, roll 2: 2, score: 13", game.getReport());
+                "6, 2, score: 8\n" +
+                "3, 2, score: 13", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndNoBonus() {
         addRolls(new int[]{6, 4});
-        assertEquals("roll 1: 6, roll 2: /", game.getReport());
+        assertEquals("6, /", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndOneBonus() {
         addRolls(new int[]{6, 4, 3});
-        assertEquals("roll 1: 6, roll 2: /, score: 13\n" +
-                "roll 1: 3", game.getReport());
+        assertEquals("6, /, score: 13\n" +
+                "3", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndOneOpenFrame() {
         addRolls(new int[]{6, 4, 3, 2});
-        assertEquals("roll 1: 6, roll 2: /, score: 13\n" +
-                "roll 1: 3, roll 2: 2, score: 18", game.getReport());
+        assertEquals("6, /, score: 13\n" +
+                "3, 2, score: 18", game.getReport());
     }
 }

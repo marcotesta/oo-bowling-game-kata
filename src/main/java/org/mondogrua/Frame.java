@@ -44,7 +44,7 @@ public class Frame {
     }
 
     public Optional<String> getReport() {
-        Optional<String> roll1Report =  firstRoll.map(roll -> "roll 1: " + roll.getPins());
+        Optional<String> roll1Report =  firstRoll.map(roll -> "" + roll.getPins());
         Optional<String> roll2Report = getRoll2Report();
         Optional<String> scoreReport = getScoreReport();
         return Stream.of(roll1Report, roll2Report, scoreReport)
@@ -148,7 +148,7 @@ public class Frame {
         }
         @Override
         public Optional<String> getRoll2Report() {
-            return secondRoll.map(roll -> "roll 2: " + roll.getPins());
+            return secondRoll.map(roll -> "" + roll.getPins());
         }
 
         @Override
@@ -178,7 +178,7 @@ public class Frame {
         }
         @Override
         public Optional<String> getRoll2Report() {
-            return secondRoll.map(roll -> "roll 2: /");
+            return secondRoll.map(roll -> "/");
         }
     }
 
@@ -194,7 +194,7 @@ public class Frame {
         }
         @Override
         public Optional<String> getRoll2Report() {
-            return secondRoll.map(roll -> "roll 2: /");
+            return secondRoll.map(roll -> "/");
         }
 
         @Override
