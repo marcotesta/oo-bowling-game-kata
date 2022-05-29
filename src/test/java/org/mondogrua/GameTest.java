@@ -106,4 +106,10 @@ public class GameTest {
         addRolls(new int[]{10});
         assertEquals("X", game.getReport());
     }
+    @Test
+    void testReportGivenOneStrikeAndOneBonus() {
+        addRolls(new int[]{10, 4});
+        assertEquals("X\n" +
+                "4", game.getReport());
+    }
 }
