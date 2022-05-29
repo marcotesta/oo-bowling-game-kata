@@ -38,8 +38,15 @@ public class Frame {
         return status.getScore();
     }
 
-    private Optional<String> getReport() {
-        return status.getReport();
+    public Optional<String> getReport() {
+        Optional<String> roll1Report =  firstRoll.map(roll -> "roll 1: " + roll.getPins());
+        Optional<String> roll2Report =  secondRoll.map(roll -> "roll 2: " + roll.getPins());
+        Optional<String> scoreReport =  getScore().map(score -> "score: " + score);
+        return Stream.of(roll1Report, roll2Report, scoreReport)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(value -> !value.isEmpty())
+                .reduce((first, second) -> first +", "+second);
     }
 
     private void setStatus(Status status) {
@@ -66,10 +73,6 @@ public class Frame {
         }
 
         default void passNext(Roll roll) {
-        }
-
-        default Optional<String> getReport() {
-            return Optional.empty();
         }
     }
 
@@ -111,11 +114,6 @@ public class Frame {
         public void handle(Roll roll) {
             secondRoll = Optional.of(roll);
         }
-
-        @Override
-        public Optional<String> getReport() {
-            return firstRoll.map(roll -> "roll 1: " + roll.getPins());
-        }
     }
 
     private class Open implements Status {
@@ -128,17 +126,6 @@ public class Frame {
         @Override
         public void passNext(Roll roll) {
             nextFrame.ifPresent(frame -> frame.add(roll));
-        }
-
-        public Optional<String> getReport() {
-            Optional<String> roll1Report =  firstRoll.map(roll -> "roll 1: " + roll.getPins());
-            Optional<String> roll2Report =  secondRoll.map(roll -> "roll 2: " + roll.getPins());
-            Optional<String> scoreReport =  getScore().map(score -> "score: " + score);
-            return Stream.of(roll1Report, roll2Report, scoreReport)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .filter(value -> !value.isEmpty())
-                    .reduce((first, second) -> first +", "+second);
         }
     }
 
