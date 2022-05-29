@@ -82,4 +82,9 @@ public class GameTest {
                 "roll 1: 6, roll 2: 2, score: 8\n" +
                 "roll 1: 3, roll 2: 2, score: 5", game.getReport());
     }
+    @Test
+    void testReportGivenOneSpareAndNoBonus() {
+        addRolls(new int[]{6, 4});
+        assertEquals("roll 1: 6, roll 2: /", game.getReport());
+    }
 }
