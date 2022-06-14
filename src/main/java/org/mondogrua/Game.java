@@ -7,10 +7,11 @@ public class Game {
     private final Frame[] frames = new Frame[10];
 
     public Game() {
-        Optional<Frame> nextFrame = Optional.empty();
-        for (int frameIdx = 9; frameIdx >= 0; frameIdx--) {
-            Frame frame = new Frame(frameIdx+1, this, nextFrame);
-            nextFrame = Optional.of(frame);
+        Optional<Frame> previousFrame = Optional.empty();
+        for (int frameIdx = 0; frameIdx <= 9; frameIdx++) {
+            Frame frame = new Frame(frameIdx+1, previousFrame);
+            previousFrame.ifPresent(prevFrame -> prevFrame.setNextFrame(frame));
+            previousFrame = Optional.of(frame);
             frames[frameIdx] = frame;
         }
     }

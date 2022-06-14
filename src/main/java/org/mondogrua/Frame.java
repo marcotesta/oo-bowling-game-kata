@@ -5,20 +5,24 @@ import java.util.stream.Stream;
 
 public class Frame {
     private final int index;
-    private final Optional<Frame> nextFrame;
+
+    private final Optional<Frame> previousFrame;
+    private Optional<Frame> nextFrame;
     private Optional<Roll> firstRoll = Optional.empty();
     private Optional<Roll> secondRoll = Optional.empty();
     private Optional<Roll> thirdRoll = Optional.empty();
     private Status status = new Empty();
 
-    private Game game;
-
     private Optional<Integer> partialScore = Optional.empty();
 
-    public Frame(int index, Game game, Optional<Frame> nextFrame) {
+    public Frame(int index, Optional<Frame> previousFrame) {
         this.index = index;
-        this.game = game;
-        this.nextFrame = nextFrame;
+        this.previousFrame = previousFrame;
+        this.nextFrame = Optional.empty();
+    }
+
+    public void setNextFrame(Frame frame) {
+        this.nextFrame = Optional.of(frame);
     }
 
     public void add(Roll roll) {
@@ -68,7 +72,7 @@ public class Frame {
 
     private void setStatus(Status status) {
         this.status = status;
-        this.status.setPartialScore();
+        this.setPartialScore();
     }
 
     private Optional<Integer> getPins() {
@@ -80,6 +84,15 @@ public class Frame {
                 .map(Roll::getPins)
                 .reduce(Integer::sum);
     }
+
+    private void setPartialScore() {
+        Optional<Integer> previousScore = previousFrame.flatMap(frame -> frame.partialScore);
+        Stream<Integer> concat = Stream.concat(
+                previousScore.stream(),
+                getScore().stream());
+        partialScore = concat.reduce(Integer::sum);
+    }
+
 
     interface Status {
         default void setNextStatus() {}
@@ -97,8 +110,6 @@ public class Frame {
         default Optional<String> getRoll2Report() { return Optional.empty(); }
 
         default Optional<String> getScoreReport() { return Optional.empty(); }
-
-        default void setPartialScore() {};
     }
 
     private class Empty implements Status {
@@ -166,10 +177,6 @@ public class Frame {
             return secondRoll.map(roll -> "" + roll.getPins());
         }
 
-        @Override
-        public void setPartialScore() {
-            partialScore = game.getScore();
-        }
 
         public Optional<String> getScoreReport() {
             return partialScore.map(partialScore -> "score: " + partialScore);
@@ -218,11 +225,6 @@ public class Frame {
         @Override
         public Optional<String> getRoll2Report() {
             return secondRoll.map(roll -> "/");
-        }
-
-        @Override
-        public void setPartialScore() {
-            partialScore = game.getScore();
         }
 
         public Optional<String> getScoreReport() {
@@ -283,10 +285,6 @@ public class Frame {
             nextFrame.ifPresent(frame -> frame.add(roll));
         }
 
-        @Override
-        public void setPartialScore() {
-            partialScore = game.getScore();
-        }
         @Override
         public Optional<String> getRoll2Report() {
             return firstRoll.map(roll -> "X");
