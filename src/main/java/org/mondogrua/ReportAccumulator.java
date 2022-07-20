@@ -3,8 +3,6 @@ package org.mondogrua;
 import java.util.Optional;
 
 public class ReportAccumulator {
-
-
     private String accumulator = "";
 
     public void add(Optional<String> optionalReport) {
