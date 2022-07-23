@@ -61,12 +61,11 @@ public class Frame implements IFrame {
     }
 
     private Optional<Integer> getPins() {
-        return Stream.concat(
-                        Stream.concat(
-                                firstRoll.getPins().stream(),
-                                secondRoll.getPins().stream()),
-                        thirdRoll.getPins().stream())
-                .reduce(Integer::sum);
+        ScoreAccumulator scoreAccumulator = new ScoreAccumulator();
+        firstRoll.addPinsTo(scoreAccumulator);
+        secondRoll.addPinsTo(scoreAccumulator);
+        thirdRoll.addPinsTo(scoreAccumulator);
+        return scoreAccumulator.value();
     }
 
     private String getFrameReport() {

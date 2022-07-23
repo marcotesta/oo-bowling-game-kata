@@ -9,9 +9,11 @@ public class Roll implements IRoll {
         this.pins = pins;
     }
 
-    public Optional<Integer> getPins() {
-        return Optional.of(this.pins);
+    @Override
+    public void addPinsTo(ScoreAccumulator accumulator) {
+        accumulator.add(pins);
     }
+
     @Override
     public String getReport() {
         return pins.toString();
