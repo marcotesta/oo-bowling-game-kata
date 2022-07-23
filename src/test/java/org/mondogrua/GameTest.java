@@ -70,78 +70,170 @@ public class GameTest {
 
     @Test
     void testReportGivenNoRolls() {
-        assertEquals("", game.getReport());
+        assertEquals("Frame 1: \n" +
+                "Frame 2: \n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
 
     @Test
     void testReportGivenOneRoll() {
         addRolls(new int[]{6});
-        assertEquals("6", game.getReport());
+        assertEquals("Frame 1: 6\n" +
+                "Frame 2: \n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneOpenFrame() {
         addRolls(new int[]{6, 2});
-        assertEquals("6, 2, score: 8", game.getReport());
+        assertEquals("Frame 1: 6, 2, score: 8\n" +
+                "Frame 2: \n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenTwoOpenFrames() {
         addRolls(new int[]{6, 2, 3, 2});
-        assertEquals(
-                "6, 2, score: 8\n" +
-                "3, 2, score: 13", game.getReport());
+        assertEquals("Frame 1: 6, 2, score: 8\n" +
+                "Frame 2: 3, 2, score: 13\n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndNoBonus() {
         addRolls(new int[]{6, 4});
-        assertEquals("6, /", game.getReport());
+        assertEquals("Frame 1: 6, /\n" +
+                "Frame 2: \n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndOneBonus() {
         addRolls(new int[]{6, 4, 3});
-        assertEquals("6, /, score: 13\n" +
-                "3", game.getReport());
+        assertEquals("Frame 1: 6, /, score: 13\n" +
+                "Frame 2: 3\n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndOneBonusAndNextRoll() {
         addRolls(new int[]{6, 4, 6, 3});
-        assertEquals("6, /, score: 16\n" +
-                "6, 3, score: 25", game.getReport());
+        assertEquals("Frame 1: 6, /, score: 16\n" +
+                "Frame 2: 6, 3, score: 25\n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneSpareAndOneOpenFrame() {
         addRolls(new int[]{6, 4, 3, 2});
-        assertEquals("6, /, score: 13\n" +
-                "3, 2, score: 18", game.getReport());
+        assertEquals("Frame 1: 6, /, score: 13\n" +
+                "Frame 2: 3, 2, score: 18\n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneStrikeAndNoBonus() {
         addRolls(new int[]{10});
-        assertEquals("X", game.getReport());
+        assertEquals("Frame 1: X\n" +
+                "Frame 2: \n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneStrikeAndOneBonus() {
         addRolls(new int[]{10, 4});
-        assertEquals("X\n" +
-                "4", game.getReport());
+        assertEquals("Frame 1: X\n" +
+                "Frame 2: 4\n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportGivenOneStrikeAndTwoBonuses() {
         addRolls(new int[]{10, 4, 2});
-        assertEquals("X, score: 16\n" +
-                "4, 2, score: 22", game.getReport());
+        assertEquals("Frame 1: X, score: 16\n" +
+                "Frame 2: 4, 2, score: 22\n" +
+                "Frame 3: \n" +
+                "Frame 4: \n" +
+                "Frame 5: \n" +
+                "Frame 6: \n" +
+                "Frame 7: \n" +
+                "Frame 8: \n" +
+                "Frame 9: \n" +
+                "Frame 10: ", game.getReport());
     }
     @Test
     void testReportingGivenCompletGameEndingWithSpare() {
         addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
-        assertEquals("6, /, score: 16\n" +
-                "6, 3, score: 25\n" +
-                "X, score: 50\n" +
-                "X, score: 68\n" +
-                "5, 3, score: 76\n" +
-                "6, 2, score: 84\n" +
-                "7, 1, score: 92\n" +
-                "X, score: 116\n" +
-                "X, score: 136\n" +
-                "4, /, score: 156", game.getReport());
+        assertEquals("Frame 1: 6, /, score: 16\n" +
+                "Frame 2: 6, 3, score: 25\n" +
+                "Frame 3: X, score: 50\n" +
+                "Frame 4: X, score: 68\n" +
+                "Frame 5: 5, 3, score: 76\n" +
+                "Frame 6: 6, 2, score: 84\n" +
+                "Frame 7: 7, 1, score: 92\n" +
+                "Frame 8: X, score: 116\n" +
+                "Frame 9: X, score: 136\n" +
+                "Frame 10: 4, /, score: 156", game.getReport());
     }
 }

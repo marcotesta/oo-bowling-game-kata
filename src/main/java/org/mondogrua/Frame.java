@@ -44,9 +44,9 @@ public class Frame implements IFrame {
     }
 
     public String getReport() {
-        return Stream.of(getRoll1Report(), getRoll2Report(), getScoreReport())
+        return  Stream.of(getRoll1Report(), getRoll2Report(), getScoreReport())
                 .filter(s -> s != null && !s.isEmpty())
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(", ", "Frame " + index + ": ", ""));
     }
 
     private Optional<Integer> getFrameScore() {
