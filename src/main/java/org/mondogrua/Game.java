@@ -21,9 +21,7 @@ public class Game {
     }
 
     public Integer getScore() {
-        ScoreAccumulator scoreAccumulator = new ScoreAccumulator();
-        frames[0].addScoreTo(scoreAccumulator);
-        return scoreAccumulator.value();
+        return frames[0].getPartialScoreOr(0);
     }
 
     public String getReport() {

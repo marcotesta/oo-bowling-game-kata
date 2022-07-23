@@ -33,14 +33,17 @@ public class Frame implements IFrame {
         status.passNext(roll);
     }
 
-    public void addScoreTo(ScoreAccumulator scoreAcc) {
-        getFrameScore().ifPresent(scoreAcc::add);
-        nextFrame.addScoreTo(scoreAcc);
-    }
-
     public void addReportTo(ReportAccumulator reportAccumulator) {
         reportAccumulator.add(getFrameReport());
         nextFrame.addReportTo(reportAccumulator);
+    }
+
+    @Override
+    public Integer getPartialScoreOr(Integer score) {
+        if (partialScore == null) {
+            return score;
+        }
+        return nextFrame.getPartialScoreOr(partialScore);
     }
 
     @Override
