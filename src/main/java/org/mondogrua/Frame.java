@@ -43,7 +43,7 @@ public class Frame implements IFrame {
         nextFrame.addReportTo(reportAccumulator);
     }
 
-    public String getReport() {
+    private String getReport() {
         return  Stream.of(getRoll1Report(), getRoll2Report(), getScoreReport())
                 .filter(s -> s != null && !s.isEmpty())
                 .collect(Collectors.joining(", ", "Frame " + index + ": ", ""));
