@@ -1,9 +1,11 @@
 package org.mondogrua;
 
+import java.util.Optional;
+
 public class NullFrame implements IFrame {
     @Override
-    public Integer getPartialScore() {
-        return 0;
+    public Optional<Integer> getPartialScore() {
+        return Optional.empty();
     }
 
     @Override

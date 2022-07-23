@@ -15,7 +15,7 @@ public class Frame implements IFrame {
     private IRoll thirdRoll = new NullRoll();
     private Status status = new Empty();
 
-    private Integer partialScore = 0;
+    private Integer partialScore = null;
 
     public Frame(int index, Frame previousFrame) {
         this.index = index;
@@ -44,12 +44,13 @@ public class Frame implements IFrame {
     }
 
     @Override
-    public Integer getPartialScore() {
-        return partialScore;
+    public Optional<Integer> getPartialScore() {
+        return Optional.ofNullable(partialScore);
     }
 
     private void setPartialScore() {
-        partialScore = previousFrame.getPartialScore() + getFrameScore().orElse(0);
+        partialScore =  Stream.concat(previousFrame.getPartialScore().stream(),
+                getFrameScore().stream()).reduce(0, Integer::sum);
     }
 
     private Optional<Integer> getFrameScore() {
