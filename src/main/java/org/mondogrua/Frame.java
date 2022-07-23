@@ -39,8 +39,7 @@ public class Frame implements IFrame {
     }
 
     public void addReportTo(ReportAccumulator reportAccumulator) {
-        String frameReport = getReport();
-        reportAccumulator.add(frameReport);
+        reportAccumulator.add(getReport());
         nextFrame.addReportTo(reportAccumulator);
     }
 
