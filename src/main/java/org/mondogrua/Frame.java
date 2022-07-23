@@ -43,18 +43,32 @@ public class Frame implements IFrame {
         nextFrame.addReportTo(reportAccumulator);
     }
 
-    private String getFrameReport() {
-        return  Stream.of(getRoll1Report(), getRoll2Report(), getPartialScoreReport())
-                .filter(s -> s != null && !s.isEmpty())
-                .collect(Collectors.joining(", ", "Frame " + index + ": ", ""));
+    @Override
+    public Integer getPartialScore() {
+        return partialScore;
+    }
+
+    private void setPartialScore() {
+        partialScore = previousFrame.getPartialScore() + getFrameScore().orElse(0);
     }
 
     private Optional<Integer> getFrameScore() {
         return status.getFrameScore();
     }
 
-    private String getPartialScoreReport() {
-        return status.getPartialScoreReport();
+    private Optional<Integer> getPins() {
+        return Stream.concat(
+                        Stream.concat(
+                                firstRoll.getPins().stream(),
+                                secondRoll.getPins().stream()),
+                        thirdRoll.getPins().stream())
+                .reduce(Integer::sum);
+    }
+
+    private String getFrameReport() {
+        return  Stream.of(getRoll1Report(), getRoll2Report(), getPartialScoreReport())
+                .filter(s -> s != null && !s.isEmpty())
+                .collect(Collectors.joining(", ", "Frame " + index + ": ", ""));
     }
 
     private String getRoll1Report() {
@@ -65,27 +79,13 @@ public class Frame implements IFrame {
         return status.getRoll2Report();
     }
 
+    private String getPartialScoreReport() {
+        return status.getPartialScoreReport();
+    }
+
     private void setStatus(Status status) {
         this.status = status;
         this.setPartialScore();
-    }
-
-    private Optional<Integer> getPins() {
-        return Stream.concat(
-                Stream.concat(
-                        firstRoll.getPins().stream(),
-                        secondRoll.getPins().stream()),
-                        thirdRoll.getPins().stream())
-                .reduce(Integer::sum);
-    }
-
-    private void setPartialScore() {
-        partialScore = previousFrame.getPartialScore() + getFrameScore().orElse(0);
-    }
-
-    @Override
-    public Integer getPartialScore() {
-        return partialScore;
     }
 
     // Status:
