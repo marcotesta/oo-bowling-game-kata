@@ -39,12 +39,12 @@ public class Frame implements IFrame {
     }
 
     public void addReportTo(ReportAccumulator reportAccumulator) {
-        reportAccumulator.add(getReport());
+        reportAccumulator.add(getFrameReport());
         nextFrame.addReportTo(reportAccumulator);
     }
 
-    private String getReport() {
-        return  Stream.of(getRoll1Report(), getRoll2Report(), getScoreReport())
+    private String getFrameReport() {
+        return  Stream.of(getRoll1Report(), getRoll2Report(), getPartialScoreReport())
                 .filter(s -> s != null && !s.isEmpty())
                 .collect(Collectors.joining(", ", "Frame " + index + ": ", ""));
     }
@@ -53,8 +53,8 @@ public class Frame implements IFrame {
         return status.getFrameScore();
     }
 
-    private String getScoreReport() {
-        return status.getScoreReport();
+    private String getPartialScoreReport() {
+        return status.getPartialScoreReport();
     }
 
     private String getRoll1Report() {
@@ -114,7 +114,7 @@ public class Frame implements IFrame {
 
         default String getRoll2Report() { return ""; }
 
-        default String getScoreReport() { return ""; }
+        default String getPartialScoreReport() { return ""; }
     }
 
     private class Empty implements Status {
@@ -181,7 +181,7 @@ public class Frame implements IFrame {
             return secondRoll.getPins().map(Objects::toString).orElse("");
         }
 
-        public String getScoreReport() {
+        public String getPartialScoreReport() {
             return "score: " + partialScore;
         }
     }
@@ -207,7 +207,7 @@ public class Frame implements IFrame {
         }
 
 
-        public String getScoreReport() {
+        public String getPartialScoreReport() {
             return "score: " + partialScore;
         }
     }
@@ -252,7 +252,7 @@ public class Frame implements IFrame {
             return "/";
         }
 
-        public String getScoreReport() {
+        public String getPartialScoreReport() {
             return  "score: " + partialScore;
         }
     }
@@ -311,7 +311,7 @@ public class Frame implements IFrame {
             return "X";
         }
 
-        public String getScoreReport() {
+        public String getPartialScoreReport() {
             return "score: " + partialScore;
         }
     }
