@@ -34,8 +34,7 @@ public class Frame implements IFrame {
     }
 
     public void addScoreTo(ScoreAccumulator scoreAcc) {
-        Optional<Integer> optonalScore = getScore();
-        optonalScore.ifPresent(scoreAcc::add);
+        getFrameScore().ifPresent(scoreAcc::add);
         nextFrame.addScoreTo(scoreAcc);
     }
 
@@ -45,8 +44,8 @@ public class Frame implements IFrame {
         nextFrame.addReportTo(reportAccumulator);
     }
 
-    private Optional<Integer> getScore() {
-        return status.getScore();
+    private Optional<Integer> getFrameScore() {
+        return status.getFrameScore();
     }
 
     public String getReport() {
@@ -82,9 +81,7 @@ public class Frame implements IFrame {
     }
 
     private void setPartialScore() {
-        Integer previousFramesScore = previousFrame.getPartialScore();
-        Integer currentFrameScore = getScore().orElse(0);
-        partialScore = previousFramesScore + currentFrameScore;
+        partialScore = previousFrame.getPartialScore() + getFrameScore().orElse(0);
     }
 
     @Override
@@ -108,7 +105,7 @@ public class Frame implements IFrame {
 
         default void handle(Roll roll) {}
 
-        default Optional<Integer> getScore() {
+        default Optional<Integer> getFrameScore() {
             return Optional.empty();
         }
 
@@ -172,7 +169,7 @@ public class Frame implements IFrame {
         }
 
         @Override
-        public Optional<Integer> getScore() {
+        public Optional<Integer> getFrameScore() {
             return getPins();
         }
 
@@ -193,7 +190,7 @@ public class Frame implements IFrame {
     private class Open implements Status {
 
         @Override
-        public Optional<Integer> getScore() {
+        public Optional<Integer> getFrameScore() {
             return getPins();
         }
 
@@ -239,7 +236,7 @@ public class Frame implements IFrame {
 
     private class SpareWithBonus implements Status {
         @Override
-        public Optional<Integer> getScore() {
+        public Optional<Integer> getFrameScore() {
             return getPins();
         }
 
@@ -301,7 +298,7 @@ public class Frame implements IFrame {
 
     private class StrikeWithTwoBonuses implements Status {
         @Override
-        public Optional<Integer> getScore() {
+        public Optional<Integer> getFrameScore() {
             return getPins();
         }
 
