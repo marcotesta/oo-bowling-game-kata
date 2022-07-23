@@ -3,10 +3,10 @@ package org.mondogrua;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class Frame {
+public class Frame implements IFrame {
     private final int index;
 
-    private final Optional<Frame> previousFrame;
+    private final IFrame previousFrame;
     private Optional<Frame> nextFrame;
     private Optional<Roll> firstRoll = Optional.empty();
     private Optional<Roll> secondRoll = Optional.empty();
@@ -15,9 +15,9 @@ public class Frame {
 
     private Integer partialScore = 0;
 
-    public Frame(int index, Optional<Frame> previousFrame) {
+    public Frame(int index, Frame previousFrame) {
         this.index = index;
-        this.previousFrame = previousFrame;
+        this.previousFrame = previousFrame != null ? previousFrame : new NullFrame();
         this.nextFrame = Optional.empty();
     }
 
@@ -87,11 +87,14 @@ public class Frame {
     }
 
     private void setPartialScore() {
-        Optional<Integer> previousScore = previousFrame.map(frame -> frame.partialScore);
-        Stream<Integer> concat = Stream.concat(
-                previousScore.stream(),
-                getScore().stream());
-        partialScore = concat.reduce(Integer::sum).orElse(0);
+        Integer previousFramesScore = previousFrame.getPartialScore();
+        Integer currentFrameScore = getScore().orElse(0);
+        partialScore = previousFramesScore + currentFrameScore;
+    }
+
+    @Override
+    public Integer getPartialScore() {
+        return partialScore;
     }
 
     // Status:
