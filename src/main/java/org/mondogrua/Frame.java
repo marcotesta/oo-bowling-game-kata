@@ -7,7 +7,7 @@ public class Frame implements IFrame {
     private final int index;
 
     private final IFrame previousFrame;
-    private Optional<Frame> nextFrame;
+    private IFrame nextFrame;
     private Optional<Roll> firstRoll = Optional.empty();
     private Optional<Roll> secondRoll = Optional.empty();
     private Optional<Roll> thirdRoll = Optional.empty();
@@ -18,11 +18,11 @@ public class Frame implements IFrame {
     public Frame(int index, Frame previousFrame) {
         this.index = index;
         this.previousFrame = previousFrame != null ? previousFrame : new NullFrame();
-        this.nextFrame = Optional.empty();
+        this.nextFrame = new NullFrame();
     }
 
     public void setNextFrame(Frame frame) {
-        this.nextFrame = Optional.of(frame);
+        this.nextFrame = frame != null ? frame : new NullFrame();
     }
 
     public void add(Roll roll) {
@@ -34,14 +34,14 @@ public class Frame implements IFrame {
     public void addScoreTo(ScoreAccumulator scoreAcc) {
         Optional<Integer> optonalScore = getScore();
         optonalScore.ifPresent(scoreAcc::add);
-        nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
+        nextFrame.addScoreTo(scoreAcc);
     }
 
     public void addReportTo(ReportAccumulator reportAccumulator) {
         Optional<String> optionalReport = getReport();
 
         optionalReport.ifPresent(reportAccumulator::add);
-        nextFrame.ifPresent(frame -> frame.addReportTo(reportAccumulator));
+        nextFrame.addReportTo(reportAccumulator);
     }
 
     private Optional<Integer> getScore() {
@@ -204,7 +204,7 @@ public class Frame implements IFrame {
 
         @Override
         public void passNext(Roll roll) {
-            nextFrame.ifPresent(frame -> frame.add(roll));
+            nextFrame.add(roll);
         }
         @Override
         public Optional<String> getRoll1Report() {
@@ -250,7 +250,7 @@ public class Frame implements IFrame {
 
         @Override
         public void passNext(Roll roll) {
-            nextFrame.ifPresent(frame -> frame.add(roll));
+            nextFrame.add(roll);
         }
         @Override
         public Optional<String> getRoll1Report() {
@@ -296,7 +296,7 @@ public class Frame implements IFrame {
 
         @Override
         public void passNext(Roll roll) {
-            nextFrame.ifPresent(frame -> frame.add(roll));
+            nextFrame.add(roll);
         }
         @Override
         public Optional<String> getRoll2Report() {
@@ -312,7 +312,7 @@ public class Frame implements IFrame {
 
         @Override
         public void passNext(Roll roll) {
-            nextFrame.ifPresent(frame -> frame.add(roll));
+            nextFrame.add(roll);
         }
 
         @Override
