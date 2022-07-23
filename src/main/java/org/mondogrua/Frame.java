@@ -13,7 +13,7 @@ public class Frame {
     private Optional<Roll> thirdRoll = Optional.empty();
     private Status status = new Empty();
 
-    private Optional<Integer> partialScore = Optional.empty();
+    private Integer partialScore = 0;
 
     public Frame(int index, Optional<Frame> previousFrame) {
         this.index = index;
@@ -51,7 +51,7 @@ public class Frame {
     public Optional<String> getReport() {
         Optional<String> roll1Report = getRoll1Report();
         Optional<String> roll2Report = getRoll2Report();
-        Optional<String> scoreReport = getScoreReport();
+        Optional<String> scoreReport = Optional.of(getScoreReport());
         return Stream.of(roll1Report, roll2Report, scoreReport)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -59,7 +59,7 @@ public class Frame {
                 .reduce((first, second) -> first +", "+second);
     }
 
-    private Optional<String> getScoreReport() {
+    private String getScoreReport() {
         return status.getScoreReport();
     }
 
@@ -87,11 +87,11 @@ public class Frame {
     }
 
     private void setPartialScore() {
-        Optional<Integer> previousScore = previousFrame.flatMap(frame -> frame.partialScore);
+        Optional<Integer> previousScore = previousFrame.map(frame -> frame.partialScore);
         Stream<Integer> concat = Stream.concat(
                 previousScore.stream(),
                 getScore().stream());
-        partialScore = concat.reduce(Integer::sum);
+        partialScore = concat.reduce(Integer::sum).orElse(0);
     }
 
     // Status:
@@ -120,7 +120,7 @@ public class Frame {
 
         default Optional<String> getRoll2Report() { return Optional.empty(); }
 
-        default Optional<String> getScoreReport() { return Optional.empty(); }
+        default String getScoreReport() { return ""; }
     }
 
     private class Empty implements Status {
@@ -187,8 +187,8 @@ public class Frame {
             return secondRoll.map(roll -> "" + roll.getPins());
         }
 
-        public Optional<String> getScoreReport() {
-            return partialScore.map(partialScore -> "score: " + partialScore);
+        public String getScoreReport() {
+            return "score: " + partialScore;
         }
     }
 
@@ -213,8 +213,8 @@ public class Frame {
         }
 
 
-        public Optional<String> getScoreReport() {
-            return partialScore.map(partialScore -> "score: " + partialScore);
+        public String getScoreReport() {
+            return "score: " + partialScore;
         }
     }
 
@@ -258,8 +258,8 @@ public class Frame {
             return secondRoll.map(roll -> "/");
         }
 
-        public Optional<String> getScoreReport() {
-            return partialScore.map(partialScore -> "score: " + partialScore);
+        public String getScoreReport() {
+            return  "score: " + partialScore;
         }
     }
 
@@ -317,8 +317,8 @@ public class Frame {
             return firstRoll.map(roll -> "X");
         }
 
-        public Optional<String> getScoreReport() {
-            return partialScore.map(partialScore -> "score: " + partialScore);
+        public String getScoreReport() {
+            return "score: " + partialScore;
         }
     }
 }

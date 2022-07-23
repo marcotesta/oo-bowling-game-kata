@@ -3,8 +3,6 @@ package org.mondogrua;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameTest {
@@ -23,46 +21,51 @@ public class GameTest {
 
     @Test
     void testScoreGivenNoRolls() {
-        assertEquals(Optional.empty(), game.getScore());
+        assertEquals(0, game.getScore());
     }
 
     @Test
     void testScoreGivenOneRoll() {
         addRolls(new int[]{6});
-        assertEquals(Optional.empty(), game.getScore());
+        assertEquals(0, game.getScore());
     }
 
     @Test
     void testScoreGivenOneOpenFrame() {
         addRolls(new int[]{6, 2});
-        assertEquals(Optional.of(8), game.getScore());
+        assertEquals(8, game.getScore());
     }
 
     @Test
     void testScoreGivenTwoOpenFrames() {
         addRolls(new int[]{6, 2, 3, 2});
-        assertEquals(Optional.of(13), game.getScore());
+        assertEquals(13, game.getScore());
     }
 
     @Test
     void testScoreGivenOneSpare() {
         addRolls(new int[]{6, 4, 3, 2});
-        assertEquals(Optional.of(18), game.getScore());
+        assertEquals(18, game.getScore());
     }
     @Test
     void testScoreGivenOneStrike() {
         addRolls(new int[]{10, 4, 3});
-        assertEquals(Optional.of(24), game.getScore());
+        assertEquals(24, game.getScore());
     }
     @Test
     void testScoreGivenCompletGameEndingWithSpare() {
         addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
-        assertEquals(Optional.of(156), game.getScore());
+        assertEquals(156, game.getScore());
     }
     @Test
     void testScoreGivenCompletGameEndingWithStrike() {
         addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5, 2});
-        assertEquals(Optional.of(143), game.getScore());
+        assertEquals(143, game.getScore());
+    }
+    @Test
+    void testScoreGivenCompletGameAllZero() {
+        addRolls(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+        assertEquals(0, game.getScore());
     }
 
     @Test
