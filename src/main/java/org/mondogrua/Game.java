@@ -1,7 +1,5 @@
 package org.mondogrua;
 
-import java.util.Optional;
-
 public class Game {
 
     private final Frame[] frames = new Frame[10];
