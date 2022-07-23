@@ -43,14 +43,14 @@ public class Frame implements IFrame {
         nextFrame.addReportTo(reportAccumulator);
     }
 
-    private Optional<Integer> getFrameScore() {
-        return status.getFrameScore();
-    }
-
     public String getReport() {
         return Stream.of(getRoll1Report(), getRoll2Report(), getScoreReport())
                 .filter(s -> s != null && !s.isEmpty())
                 .collect(Collectors.joining(", "));
+    }
+
+    private Optional<Integer> getFrameScore() {
+        return status.getFrameScore();
     }
 
     private String getScoreReport() {
