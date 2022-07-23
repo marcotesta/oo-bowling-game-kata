@@ -156,7 +156,7 @@ public class Frame implements IFrame {
 
         @Override
         public String getRoll1Report() {
-            return firstRoll.getPins().map(Object::toString).orElse("");
+            return firstRoll.getReport();
         }
     }
 
@@ -174,11 +174,11 @@ public class Frame implements IFrame {
 
         @Override
         public String getRoll1Report() {
-            return firstRoll.getPins().map(Object::toString).orElse("");
+            return firstRoll.getReport();
         }
         @Override
         public String getRoll2Report() {
-            return secondRoll.getPins().map(Objects::toString).orElse("");
+            return secondRoll.getReport();
         }
 
         public String getPartialScoreReport() {
@@ -199,11 +199,11 @@ public class Frame implements IFrame {
         }
         @Override
         public String getRoll1Report() {
-            return firstRoll.getPins().map(Objects::toString).orElse("");
+            return firstRoll.getReport();
         }
         @Override
         public String getRoll2Report() {
-            return secondRoll.getPins().map(Objects::toString).orElse("");
+            return secondRoll.getReport();
         }
 
 
@@ -225,7 +225,7 @@ public class Frame implements IFrame {
 
         @Override
         public String getRoll1Report() {
-            return firstRoll.getPins().map(Objects::toString).orElse("");
+            return firstRoll.getReport();
         }
         @Override
         public String getRoll2Report() {
@@ -245,7 +245,7 @@ public class Frame implements IFrame {
         }
         @Override
         public String getRoll1Report() {
-            return firstRoll.getPins().map(Objects::toString).orElse("");
+            return firstRoll.getReport();
         }
         @Override
         public String getRoll2Report() {

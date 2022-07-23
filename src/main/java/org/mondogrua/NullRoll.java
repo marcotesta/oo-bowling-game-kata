@@ -7,4 +7,9 @@ public class NullRoll implements IRoll {
     public Optional<Integer> getPins() {
         return Optional.empty();
     }
+
+    @Override
+    public String getReport() {
+        return "";
+    }
 }
