@@ -39,7 +39,8 @@ public class Frame {
 
     public void addReportTo(ReportAccumulator reportAccumulator) {
         Optional<String> optionalReport = getReport();
-        reportAccumulator.add(optionalReport);
+
+        optionalReport.ifPresent(reportAccumulator::add);
         nextFrame.ifPresent(frame -> frame.addReportTo(reportAccumulator));
     }
 
