@@ -33,7 +33,7 @@ public class Frame {
 
     public void addScoreTo(ScoreAccumulator scoreAcc) {
         Optional<Integer> optonalScore = getScore();
-        scoreAcc.add(optonalScore);
+        optonalScore.ifPresent(scoreAcc::add);
         nextFrame.ifPresent(frame -> frame.addScoreTo(scoreAcc));
     }
 
