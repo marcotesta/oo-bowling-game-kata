@@ -4,7 +4,7 @@ public class ReportAccumulator {
     private String accumulator = "";
 
     public void add(String report) {
-        if(report != null) {
+        if(report != null && !report.isEmpty()) {
             if (accumulator.length() > 0) accumulator += "\n";
             accumulator += report;
         }

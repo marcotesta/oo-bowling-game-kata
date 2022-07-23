@@ -2,6 +2,7 @@ package org.mondogrua;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Frame implements IFrame {
@@ -39,9 +40,8 @@ public class Frame implements IFrame {
     }
 
     public void addReportTo(ReportAccumulator reportAccumulator) {
-        Optional<String> optionalReport = getReport();
-
-        optionalReport.ifPresent(reportAccumulator::add);
+        String frameReport = getReport();
+        reportAccumulator.add(frameReport);
         nextFrame.addReportTo(reportAccumulator);
     }
 
@@ -49,26 +49,21 @@ public class Frame implements IFrame {
         return status.getScore();
     }
 
-    public Optional<String> getReport() {
-        Optional<String> roll1Report = getRoll1Report();
-        Optional<String> roll2Report = getRoll2Report();
-        Optional<String> scoreReport = Optional.of(getScoreReport());
-        return Stream.of(roll1Report, roll2Report, scoreReport)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(value -> !value.isEmpty())
-                .reduce((first, second) -> first +", "+second);
+    public String getReport() {
+        return Stream.of(getRoll1Report(), getRoll2Report(), getScoreReport())
+                .filter(s -> s != null && !s.isEmpty())
+                .collect(Collectors.joining(", "));
     }
 
     private String getScoreReport() {
         return status.getScoreReport();
     }
 
-    private Optional<String> getRoll1Report() {
+    private String getRoll1Report() {
         return status.getRoll1Report();
     }
 
-    private Optional<String> getRoll2Report() {
+    private String getRoll2Report() {
         return status.getRoll2Report();
     }
 
@@ -119,9 +114,9 @@ public class Frame implements IFrame {
 
         default void passNext(Roll roll) {}
 
-        default Optional<String> getRoll1Report() { return Optional.empty(); }
+        default String getRoll1Report() { return ""; }
 
-        default Optional<String> getRoll2Report() { return Optional.empty(); }
+        default String getRoll2Report() { return ""; }
 
         default String getScoreReport() { return ""; }
     }
@@ -164,8 +159,8 @@ public class Frame implements IFrame {
         }
 
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.getPins().map(Object::toString);
+        public String getRoll1Report() {
+            return firstRoll.getPins().map(Object::toString).orElse("");
         }
     }
 
@@ -182,12 +177,12 @@ public class Frame implements IFrame {
         }
 
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.getPins().map(Object::toString);
+        public String getRoll1Report() {
+            return firstRoll.getPins().map(Object::toString).orElse("");
         }
         @Override
-        public Optional<String> getRoll2Report() {
-            return secondRoll.getPins().map(Objects::toString);
+        public String getRoll2Report() {
+            return secondRoll.getPins().map(Objects::toString).orElse("");
         }
 
         public String getScoreReport() {
@@ -207,12 +202,12 @@ public class Frame implements IFrame {
             nextFrame.add(roll);
         }
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.getPins().map(Objects::toString);
+        public String getRoll1Report() {
+            return firstRoll.getPins().map(Objects::toString).orElse("");
         }
         @Override
-        public Optional<String> getRoll2Report() {
-            return secondRoll.getPins().map(Objects::toString);
+        public String getRoll2Report() {
+            return secondRoll.getPins().map(Objects::toString).orElse("");
         }
 
 
@@ -233,12 +228,12 @@ public class Frame implements IFrame {
         }
 
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.getPins().map(Objects::toString);
+        public String getRoll1Report() {
+            return firstRoll.getPins().map(Objects::toString).orElse("");
         }
         @Override
-        public Optional<String> getRoll2Report() {
-            return Optional.of( "/");
+        public String getRoll2Report() {
+            return "/";
         }
     }
 
@@ -253,12 +248,12 @@ public class Frame implements IFrame {
             nextFrame.add(roll);
         }
         @Override
-        public Optional<String> getRoll1Report() {
-            return firstRoll.getPins().map(Objects::toString);
+        public String getRoll1Report() {
+            return firstRoll.getPins().map(Objects::toString).orElse("");
         }
         @Override
-        public Optional<String> getRoll2Report() {
-            return Optional.of( "/");
+        public String getRoll2Report() {
+            return "/";
         }
 
         public String getScoreReport() {
@@ -278,8 +273,8 @@ public class Frame implements IFrame {
         }
 
         @Override
-        public Optional<String> getRoll2Report() {
-            return Optional.of("X");
+        public String getRoll2Report() {
+            return "X";
         }
     }
 
@@ -299,8 +294,8 @@ public class Frame implements IFrame {
             nextFrame.add(roll);
         }
         @Override
-        public Optional<String> getRoll2Report() {
-            return Optional.of("X");
+        public String getRoll2Report() {
+            return "X";
         }
     }
 
@@ -316,8 +311,8 @@ public class Frame implements IFrame {
         }
 
         @Override
-        public Optional<String> getRoll2Report() {
-            return Optional.of( "X");
+        public String getRoll2Report() {
+            return "X";
         }
 
         public String getScoreReport() {
