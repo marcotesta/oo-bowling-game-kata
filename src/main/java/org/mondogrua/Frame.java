@@ -12,7 +12,7 @@ public class Frame implements IFrame {
     private IRoll firstRoll = new NullRoll();
     private IRoll secondRoll = new NullRoll();
     private IRoll thirdRoll = new NullRoll();
-    private State state = new Empty();
+    private State state = new NotStarted();
 
     private Integer partialScore = null;
 
@@ -91,8 +91,8 @@ public class Frame implements IFrame {
     }
 
     // State:
-    // Empty
-    // FirstRoll
+    // NotStarted
+    // OneRoll
     // JustOpen
     // Open
     // Spare
@@ -119,7 +119,7 @@ public class Frame implements IFrame {
         default String getPartialScoreReport() { return ""; }
     }
 
-    private class Empty implements State {
+    private class NotStarted implements State {
         public void setNextState() {
             Optional<Integer> pins = getPins();
             if (pins.isEmpty()) {
@@ -127,7 +127,7 @@ public class Frame implements IFrame {
             }
             State nextStatus = pins.get().equals(10)
                     ? new Strike()
-                    : new FirstRoll();
+                    : new OneRoll();
             setState(nextStatus);
         }
 
@@ -137,7 +137,7 @@ public class Frame implements IFrame {
         }
     }
 
-    private class FirstRoll implements State {
+    private class OneRoll implements State {
 
         @Override
         public void setNextState() {
