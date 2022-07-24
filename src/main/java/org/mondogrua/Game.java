@@ -26,4 +26,8 @@ public class Game {
         framesHead.addReportTo(reportAccumulator, 0);
         return reportAccumulator.value();
     }
+
+    public int currentFrame() {
+        return framesHead.currentFrame(-1);
+    }
 }

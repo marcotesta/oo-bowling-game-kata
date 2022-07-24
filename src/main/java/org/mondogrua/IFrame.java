@@ -5,4 +5,6 @@ public interface IFrame {
 
     void add(Roll roll);
     Integer getLastPartialScore(Integer previousFramePartialScore);
+
+    int currentFrame(Integer previousFrameIndex);
 }

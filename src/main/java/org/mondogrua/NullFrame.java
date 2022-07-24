@@ -16,4 +16,9 @@ public class NullFrame implements IFrame {
     public Integer getLastPartialScore(Integer previousFramePartialScore) {
         return previousFramePartialScore;
     }
+
+    @Override
+    public int currentFrame(Integer previousFrameIndex) {
+        return previousFrameIndex;
+    }
 }

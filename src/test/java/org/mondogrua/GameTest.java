@@ -19,6 +19,8 @@ public class GameTest {
         game = new Game();
     }
 
+    // Test Score
+
     @Test
     void testScoreGivenNoRolls() {
         assertEquals(0, game.getScore());
@@ -235,5 +237,71 @@ public class GameTest {
                 "Frame 8: X, score: 116\n" +
                 "Frame 9: X, score: 136\n" +
                 "Frame 10: 4, /, score: 156", game.getReport());
+    }
+
+    // Test CurrentFrame
+
+    @Test
+    void testCurrentFrameGivenNoRolls() {
+        assertEquals(1, game.currentFrame());
+    }
+
+    @Test
+    void testCurrentFrameGivenOneRoll() {
+        addRolls(new Integer[]{6});
+        assertEquals(1, game.currentFrame());
+    }
+
+    @Test
+    void testCurrentFrameGivenOneOpenFrame() {
+        addRolls(new Integer[]{6, 2});
+        assertEquals(2, game.currentFrame());
+    }
+
+    @Test
+    void testCurrentFrameGivenTwoOpenFrameAndOneRoll() {
+        addRolls(new Integer[]{6, 2, 3});
+        assertEquals(2, game.currentFrame());
+    }
+
+    @Test
+    void testCurrentFrameGivenTwoOpenFrames() {
+        addRolls(new Integer[]{6, 2, 3, 2});
+        assertEquals(3, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenOneStrike() {
+        addRolls(new Integer[]{10, 4});
+        assertEquals(2, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenCompletGameEndingWithOpen() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 2});
+        assertEquals(-1, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenCompletGameEndingWithSpareWithoutTheBonus() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6});
+        assertEquals(10, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenCompletGameEndingWithSpareWithTheBonus() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
+        assertEquals(-1, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenCompletGameEndingWithAStrikeWithoutBonuses() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 10});
+        assertEquals(10, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenCompletGameEndingWithAStrikeWithOneBonus() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 10, 10});
+        assertEquals(10, game.currentFrame());
+    }
+    @Test
+    void testCurrentFrameGivenCompletGameEndingWithAStrikeWithTwoBonuses() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 10, 10, 10});
+        assertEquals(-1, game.currentFrame());
     }
 }

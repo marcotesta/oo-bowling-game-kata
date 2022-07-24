@@ -41,6 +41,11 @@ public class Frame implements IFrame {
         return nextFrame.getLastPartialScore(getFramePartialScore(previousFramePartialScore).orElse(previousFramePartialScore));
     }
 
+    @Override
+    public int currentFrame(Integer previousFrameIndex) {
+        return state.currentFrame(previousFrameIndex);
+    }
+
     private Optional<Integer> getFramePartialScore(Integer previousFramePartialScore) {
         return getFrameScore().map(frameScore -> previousFramePartialScore + frameScore);
     }
@@ -110,6 +115,8 @@ public class Frame implements IFrame {
         default String getRoll1Report() { return ""; }
 
         default String getRoll2Report() { return ""; }
+
+        int currentFrame(Integer previousFrameIndex);
     }
 
     private class NotStarted implements State {
@@ -120,6 +127,11 @@ public class Frame implements IFrame {
         @Override
         public void handle(Roll roll) {
             firstRoll = roll;
+        }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return index;
         }
     }
 
@@ -138,6 +150,11 @@ public class Frame implements IFrame {
         @Override
         public String getRoll1Report() {
             return firstRoll.getReport();
+        }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return index;
         }
     }
 
@@ -160,6 +177,11 @@ public class Frame implements IFrame {
         public String getRoll2Report() {
             return secondRoll.getReport();
         }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(-1);
+        }
     }
 
     private class Open implements State {
@@ -180,6 +202,11 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return secondRoll.getReport();
+        }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(-1);
         }
     }
 
@@ -202,6 +229,11 @@ public class Frame implements IFrame {
         public String getRoll2Report() {
             return "/";
         }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(index);
+        }
     }
 
     private class SpareWithBonus implements State {
@@ -222,6 +254,11 @@ public class Frame implements IFrame {
         public String getRoll2Report() {
             return "/";
         }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(-1);
+        }
     }
 
     private class Strike implements State {
@@ -238,6 +275,11 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return "X";
+        }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(index);
         }
     }
 
@@ -260,6 +302,11 @@ public class Frame implements IFrame {
         public String getRoll2Report() {
             return "X";
         }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(index);
+        }
     }
 
     private class StrikeWithTwoBonuses implements State {
@@ -276,6 +323,11 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return "X";
+        }
+
+        @Override
+        public int currentFrame(Integer previousFrameIndex) {
+            return nextFrame.currentFrame(-1);
         }
     }
 }
