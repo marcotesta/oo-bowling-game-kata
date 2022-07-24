@@ -1,12 +1,8 @@
 package org.mondogrua;
 
-import java.util.Optional;
-
 public interface IFrame {
-    void addReportTo(ReportAccumulator reportAccumulator);
+    void addReportTo(ReportAccumulator reportAccumulator, Integer previousFramePartialScore);
 
     void add(Roll roll);
-    Integer getPartialScoreOr(Integer score);
-
-    Optional<Integer> getPartialScore();
+    Integer getLastPartialScore(Integer previousFramePartialScore);
 }

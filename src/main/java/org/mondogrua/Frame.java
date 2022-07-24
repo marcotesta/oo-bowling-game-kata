@@ -6,19 +6,14 @@ import java.util.stream.Stream;
 
 public class Frame implements IFrame {
     private final int index;
-
-    private final IFrame previousFrame;
     private IFrame nextFrame;
     private IRoll firstRoll = new NullRoll();
     private IRoll secondRoll = new NullRoll();
     private IRoll thirdRoll = new NullRoll();
     private State state = new NotStarted();
 
-    private Integer partialScore = null;
-
-    public Frame(int index, Frame previousFrame) {
+    public Frame(int index) {
         this.index = index;
-        this.previousFrame = previousFrame != null ? previousFrame : new NullFrame();
         this.nextFrame = new NullFrame();
     }
 
@@ -32,27 +27,22 @@ public class Frame implements IFrame {
         state.passNext(roll);
     }
 
-    public void addReportTo(ReportAccumulator reportAccumulator) {
-        reportAccumulator.add(getFrameReport());
-        nextFrame.addReportTo(reportAccumulator);
+    public void addReportTo(ReportAccumulator reportAccumulator, Integer previousFramePartialScore) {
+        reportAccumulator.add(getFrameReport(previousFramePartialScore));
+        nextFrame.addReportTo(reportAccumulator, getFramePartialScore(previousFramePartialScore).orElse(previousFramePartialScore));
     }
 
     @Override
-    public Integer getPartialScoreOr(Integer score) {
-        if (partialScore == null) {
-            return score;
+    public Integer getLastPartialScore(Integer previousFramePartialScore) {
+        Optional<Integer> framePartialScore = getFramePartialScore(previousFramePartialScore);
+        if (framePartialScore.isEmpty()) {
+            return previousFramePartialScore;
         }
-        return nextFrame.getPartialScoreOr(partialScore);
+        return nextFrame.getLastPartialScore(getFramePartialScore(previousFramePartialScore).orElse(previousFramePartialScore));
     }
 
-    @Override
-    public Optional<Integer> getPartialScore() {
-        return Optional.ofNullable(partialScore);
-    }
-
-    private void setPartialScore() {
-        partialScore =  Stream.concat(previousFrame.getPartialScore().stream(),
-                getFrameScore().stream()).reduce(0, Integer::sum);
+    private Optional<Integer> getFramePartialScore(Integer previousFramePartialScore) {
+        return getFrameScore().map(frameScore -> previousFramePartialScore + frameScore);
     }
 
     private Optional<Integer> getFrameScore() {
@@ -67,8 +57,12 @@ public class Frame implements IFrame {
         return scoreAccumulator.value();
     }
 
-    private String getFrameReport() {
-        return  Stream.of(getRoll1Report(), getRoll2Report(), getPartialScoreReport())
+    private String getFrameReport(Integer previousFramePartialScore) {
+        return  Stream.of(
+                        getRoll1Report(),
+                        getRoll2Report(),
+                        getPartialScoreReport(previousFramePartialScore)
+                )
                 .filter(s -> s != null && !s.isEmpty())
                 .collect(Collectors.joining(", ", "Frame " + index + ": ", ""));
     }
@@ -81,13 +75,14 @@ public class Frame implements IFrame {
         return state.getRoll2Report();
     }
 
-    private String getPartialScoreReport() {
-        return state.getPartialScoreReport();
+    public String getPartialScoreReport(Integer previousFramePartialScore) {
+        return getFramePartialScore(previousFramePartialScore)
+                .map(framePartialScore -> "score: " + framePartialScore)
+                .orElse("");
     }
 
     private void setState(State state) {
         this.state = state;
-        this.setPartialScore();
     }
 
     // State:
@@ -115,20 +110,11 @@ public class Frame implements IFrame {
         default String getRoll1Report() { return ""; }
 
         default String getRoll2Report() { return ""; }
-
-        default String getPartialScoreReport() { return ""; }
     }
 
     private class NotStarted implements State {
         public void setNextState() {
-            Optional<Integer> pins = getPins();
-            if (pins.isEmpty()) {
-                return;
-            }
-            State nextStatus = pins.get().equals(10)
-                    ? new Strike()
-                    : new OneRoll();
-            setState(nextStatus);
+            getPins().ifPresent(pins -> setState(pins.equals(10) ? new Strike() : new OneRoll()));
         }
 
         @Override
@@ -141,14 +127,7 @@ public class Frame implements IFrame {
 
         @Override
         public void setNextState() {
-            Optional<Integer> pins = getPins();
-            if (pins.isEmpty()) {
-                return;
-            }
-            State nextStatus = pins.get().equals(10)
-                    ? new Spare()
-                    : new JustOpen();
-            setState(nextStatus);
+            getPins().ifPresent(pins -> setState(pins.equals(10) ? new Spare() : new JustOpen()));
         }
 
         @Override
@@ -165,8 +144,7 @@ public class Frame implements IFrame {
     private class JustOpen implements State {
         @Override
         public void setNextState() {
-            State nextStatus =  new Open();
-            setState(nextStatus);
+            setState(new Open());
         }
 
         @Override
@@ -181,10 +159,6 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return secondRoll.getReport();
-        }
-
-        public String getPartialScoreReport() {
-            return "score: " + partialScore;
         }
     }
 
@@ -206,11 +180,6 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return secondRoll.getReport();
-        }
-
-
-        public String getPartialScoreReport() {
-            return "score: " + partialScore;
         }
     }
 
@@ -252,10 +221,6 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return "/";
-        }
-
-        public String getPartialScoreReport() {
-            return  "score: " + partialScore;
         }
     }
 
@@ -311,10 +276,6 @@ public class Frame implements IFrame {
         @Override
         public String getRoll2Report() {
             return "X";
-        }
-
-        public String getPartialScoreReport() {
-            return "score: " + partialScore;
         }
     }
 }

@@ -6,7 +6,6 @@ public class NullRoll implements IRoll {
 
     @Override
     public void addPinsTo(ScoreAccumulator accumulator) {
-
     }
 
     @Override
