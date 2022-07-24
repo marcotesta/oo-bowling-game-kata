@@ -12,4 +12,14 @@ public class NullRoll implements IRoll {
     public String getReport() {
         return "";
     }
+
+    @Override
+    public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+        maxPossibleScoreAccumulator.add(10);
+    }
+
+    @Override
+    public boolean isStrike() {
+        return false;
+    }
 }

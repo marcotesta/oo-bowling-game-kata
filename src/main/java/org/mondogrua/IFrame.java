@@ -7,4 +7,6 @@ public interface IFrame {
     Integer getLastPartialScore(Integer previousFramePartialScore);
 
     int currentFrame(Integer previousFrameIndex);
+
+    void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator);
 }

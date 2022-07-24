@@ -18,4 +18,14 @@ public class Roll implements IRoll {
     public String getReport() {
         return pins.toString();
     }
+
+    @Override
+    public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+        maxPossibleScoreAccumulator.add(pins);
+    }
+
+    @Override
+    public boolean isStrike() {
+        return pins.equals(10);
+    }
 }

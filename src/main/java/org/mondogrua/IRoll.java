@@ -7,4 +7,8 @@ public interface IRoll {
     void addPinsTo(ScoreAccumulator accumulator);
 
     String getReport();
+
+    void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator);
+
+    boolean isStrike();
 }

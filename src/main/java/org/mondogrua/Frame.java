@@ -46,6 +46,12 @@ public class Frame implements IFrame {
         return state.currentFrame(previousFrameIndex);
     }
 
+    @Override
+    public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+        state.addPossibleScoreTo(maxPossibleScoreAccumulator);
+        nextFrame.addPossibleScoreTo(maxPossibleScoreAccumulator);
+    }
+
     private Optional<Integer> getFramePartialScore(Integer previousFramePartialScore) {
         return getFrameScore().map(frameScore -> previousFramePartialScore + frameScore);
     }
@@ -117,11 +123,13 @@ public class Frame implements IFrame {
         default String getRoll2Report() { return ""; }
 
         int currentFrame(Integer previousFrameIndex);
+
+        void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator);
     }
 
     private class NotStarted implements State {
         public void setNextState() {
-            getPins().ifPresent(pins -> setState(pins.equals(10) ? new Strike() : new OneRoll()));
+            setState(firstRoll.isStrike()? new Strike() : new OneRoll());
         }
 
         @Override
@@ -132,6 +140,13 @@ public class Frame implements IFrame {
         @Override
         public int currentFrame(Integer previousFrameIndex) {
             return index;
+        }
+
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
         }
     }
 
@@ -155,6 +170,12 @@ public class Frame implements IFrame {
         @Override
         public int currentFrame(Integer previousFrameIndex) {
             return index;
+        }
+
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
         }
     }
 
@@ -182,6 +203,11 @@ public class Frame implements IFrame {
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(-1);
         }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+        }
     }
 
     private class Open implements State {
@@ -207,6 +233,11 @@ public class Frame implements IFrame {
         @Override
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(-1);
+        }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
         }
     }
 
@@ -234,6 +265,12 @@ public class Frame implements IFrame {
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(index);
         }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+        }
     }
 
     private class SpareWithBonus implements State {
@@ -259,6 +296,12 @@ public class Frame implements IFrame {
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(-1);
         }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+        }
     }
 
     private class Strike implements State {
@@ -280,6 +323,12 @@ public class Frame implements IFrame {
         @Override
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(index);
+        }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
         }
     }
 
@@ -307,6 +356,14 @@ public class Frame implements IFrame {
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(index);
         }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            if (secondRoll.isStrike()) {
+                secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            }
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+        }
     }
 
     private class StrikeWithTwoBonuses implements State {
@@ -328,6 +385,12 @@ public class Frame implements IFrame {
         @Override
         public int currentFrame(Integer previousFrameIndex) {
             return nextFrame.currentFrame(-1);
+        }
+        @Override
+        public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+            firstRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            secondRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
+            thirdRoll.addPossibleScoreTo(maxPossibleScoreAccumulator);
         }
     }
 }

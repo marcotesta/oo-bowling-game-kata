@@ -21,4 +21,8 @@ public class NullFrame implements IFrame {
     public int currentFrame(Integer previousFrameIndex) {
         return previousFrameIndex;
     }
+
+    @Override
+    public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
+    }
 }

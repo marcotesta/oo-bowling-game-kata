@@ -70,6 +70,7 @@ public class GameTest {
         assertEquals(0, game.getScore());
     }
 
+    // Report
     @Test
     void testReportGivenNoRolls() {
         assertEquals("Frame 1: \n" +
@@ -303,5 +304,82 @@ public class GameTest {
     void testCurrentFrameGivenCompletGameEndingWithAStrikeWithTwoBonuses() {
         addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 10, 10, 10});
         assertEquals(-1, game.currentFrame());
+    }
+
+    // Test MaxPossibleScore
+
+    @Test
+    void testMaxPossibleScoreGivenNoRolls() {
+        assertEquals(300, game.getMaxPossibleScore());
+    }
+
+    @Test
+    void testMaxPossibleScoreGivenOneRoll() {
+        addRolls(new Integer[]{6});
+        assertEquals(290, game.getMaxPossibleScore());
+    }
+
+    @Test
+    void testMaxPossibleScoreGivenOneOpenFrame() {
+        addRolls(new Integer[]{6, 2});
+        assertEquals(278, game.getMaxPossibleScore());
+    }
+
+    @Test
+    void testMaxPossibleScoreGivenOneOpenFrameAndARoll() {
+        addRolls(new Integer[]{6, 2, 3});
+        assertEquals(268, game.getMaxPossibleScore());
+    }
+
+    @Test
+    void testMaxPossibleScoreGivenTwoOpenFrames() {
+        addRolls(new Integer[]{6, 2, 3, 2});
+        assertEquals(253, game.getMaxPossibleScore());
+    }
+
+    @Test
+    void testMaxPossibleScoreGivenOneSpare() {
+        addRolls(new Integer[]{6, 4, 3, 2});
+        assertEquals(258, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenOneStrike() {
+        addRolls(new Integer[]{10, 4, 3});
+        assertEquals(264, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletGameEndingWithSpare() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
+        assertEquals(156, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletGameEndingWithStrikeAndNoBonuses() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10});
+        assertEquals(156, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletGameEndingWithStrikeAndOneBonus() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5});
+        assertEquals(146, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletGameEndingWithStrikeAndTwoBonuses() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5, 2});
+        assertEquals(143, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletGameEndingWithStrikeAndFirstBonusStrikeAndSecondBonusRoll() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 10, 2});
+        assertEquals(148, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletGameAllZero() {
+        addRolls(new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+        assertEquals(0, game.getMaxPossibleScore());
+    }
+    @Test
+    void testMaxPossibleScoreGivenCompletPerfectGame() {
+        addRolls(new Integer[]{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10});
+        assertEquals(300, game.getMaxPossibleScore());
     }
 }

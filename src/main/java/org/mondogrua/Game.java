@@ -30,4 +30,10 @@ public class Game {
     public int currentFrame() {
         return framesHead.currentFrame(-1);
     }
+
+    public int getMaxPossibleScore() {
+        ScoreAccumulator maxPossibleScoreAccumulator = new ScoreAccumulator();
+        framesHead.addPossibleScoreTo(maxPossibleScoreAccumulator);
+        return maxPossibleScoreAccumulator.value().orElse(0);
+    }
 }
