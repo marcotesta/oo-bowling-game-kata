@@ -3,15 +3,15 @@ package org.mondogrua;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameTest {
 
     Game game;
-    private void addRolls(int[] rolls) {
-        for (int roll : rolls) {
-            game.add(new Roll(roll));
-        }
+    private void addRolls(Integer[] rolls) {
+        Arrays.asList(rolls).forEach(pins -> game.add(new Roll(pins)));
     }
 
     @BeforeEach
@@ -26,45 +26,45 @@ public class GameTest {
 
     @Test
     void testScoreGivenOneRoll() {
-        addRolls(new int[]{6});
+        addRolls(new Integer[]{6});
         assertEquals(0, game.getScore());
     }
 
     @Test
     void testScoreGivenOneOpenFrame() {
-        addRolls(new int[]{6, 2});
+        addRolls(new Integer[]{6, 2});
         assertEquals(8, game.getScore());
     }
 
     @Test
     void testScoreGivenTwoOpenFrames() {
-        addRolls(new int[]{6, 2, 3, 2});
+        addRolls(new Integer[]{6, 2, 3, 2});
         assertEquals(13, game.getScore());
     }
 
     @Test
     void testScoreGivenOneSpare() {
-        addRolls(new int[]{6, 4, 3, 2});
+        addRolls(new Integer[]{6, 4, 3, 2});
         assertEquals(18, game.getScore());
     }
     @Test
     void testScoreGivenOneStrike() {
-        addRolls(new int[]{10, 4, 3});
+        addRolls(new Integer[]{10, 4, 3});
         assertEquals(24, game.getScore());
     }
     @Test
     void testScoreGivenCompletGameEndingWithSpare() {
-        addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
         assertEquals(156, game.getScore());
     }
     @Test
     void testScoreGivenCompletGameEndingWithStrike() {
-        addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5, 2});
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5, 2});
         assertEquals(143, game.getScore());
     }
     @Test
     void testScoreGivenCompletGameAllZero() {
-        addRolls(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+        addRolls(new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
         assertEquals(0, game.getScore());
     }
 
@@ -84,7 +84,7 @@ public class GameTest {
 
     @Test
     void testReportGivenOneRoll() {
-        addRolls(new int[]{6});
+        addRolls(new Integer[]{6});
         assertEquals("Frame 1: 6\n" +
                 "Frame 2: \n" +
                 "Frame 3: \n" +
@@ -98,7 +98,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneOpenFrame() {
-        addRolls(new int[]{6, 2});
+        addRolls(new Integer[]{6, 2});
         assertEquals("Frame 1: 6, 2, score: 8\n" +
                 "Frame 2: \n" +
                 "Frame 3: \n" +
@@ -112,7 +112,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenTwoOpenFrames() {
-        addRolls(new int[]{6, 2, 3, 2});
+        addRolls(new Integer[]{6, 2, 3, 2});
         assertEquals("Frame 1: 6, 2, score: 8\n" +
                 "Frame 2: 3, 2, score: 13\n" +
                 "Frame 3: \n" +
@@ -126,7 +126,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneSpareAndNoBonus() {
-        addRolls(new int[]{6, 4});
+        addRolls(new Integer[]{6, 4});
         assertEquals("Frame 1: 6, /\n" +
                 "Frame 2: \n" +
                 "Frame 3: \n" +
@@ -140,7 +140,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneSpareAndOneBonus() {
-        addRolls(new int[]{6, 4, 3});
+        addRolls(new Integer[]{6, 4, 3});
         assertEquals("Frame 1: 6, /, score: 13\n" +
                 "Frame 2: 3\n" +
                 "Frame 3: \n" +
@@ -154,7 +154,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneSpareAndOneBonusAndNextRoll() {
-        addRolls(new int[]{6, 4, 6, 3});
+        addRolls(new Integer[]{6, 4, 6, 3});
         assertEquals("Frame 1: 6, /, score: 16\n" +
                 "Frame 2: 6, 3, score: 25\n" +
                 "Frame 3: \n" +
@@ -168,7 +168,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneSpareAndOneOpenFrame() {
-        addRolls(new int[]{6, 4, 3, 2});
+        addRolls(new Integer[]{6, 4, 3, 2});
         assertEquals("Frame 1: 6, /, score: 13\n" +
                 "Frame 2: 3, 2, score: 18\n" +
                 "Frame 3: \n" +
@@ -182,7 +182,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneStrikeAndNoBonus() {
-        addRolls(new int[]{10});
+        addRolls(new Integer[]{10});
         assertEquals("Frame 1: X\n" +
                 "Frame 2: \n" +
                 "Frame 3: \n" +
@@ -196,7 +196,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneStrikeAndOneBonus() {
-        addRolls(new int[]{10, 4});
+        addRolls(new Integer[]{10, 4});
         assertEquals("Frame 1: X\n" +
                 "Frame 2: 4\n" +
                 "Frame 3: \n" +
@@ -210,7 +210,7 @@ public class GameTest {
     }
     @Test
     void testReportGivenOneStrikeAndTwoBonuses() {
-        addRolls(new int[]{10, 4, 2});
+        addRolls(new Integer[]{10, 4, 2});
         assertEquals("Frame 1: X, score: 16\n" +
                 "Frame 2: 4, 2, score: 22\n" +
                 "Frame 3: \n" +
@@ -224,7 +224,7 @@ public class GameTest {
     }
     @Test
     void testReportingGivenCompletGameEndingWithSpare() {
-        addRolls(new int[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
         assertEquals("Frame 1: 6, /, score: 16\n" +
                 "Frame 2: 6, 3, score: 25\n" +
                 "Frame 3: X, score: 50\n" +
