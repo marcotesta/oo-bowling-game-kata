@@ -1,6 +1,5 @@
 package org.mondogrua;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,7 +12,7 @@ public class Frame implements IFrame {
     private IRoll firstRoll = new NullRoll();
     private IRoll secondRoll = new NullRoll();
     private IRoll thirdRoll = new NullRoll();
-    private Status status = new Empty();
+    private State state = new Empty();
 
     private Integer partialScore = null;
 
@@ -28,9 +27,9 @@ public class Frame implements IFrame {
     }
 
     public void add(Roll roll) {
-        status.handle(roll);
-        status.setNextStatus();
-        status.passNext(roll);
+        state.handle(roll);
+        state.setNextState();
+        state.passNext(roll);
     }
 
     public void addReportTo(ReportAccumulator reportAccumulator) {
@@ -57,7 +56,7 @@ public class Frame implements IFrame {
     }
 
     private Optional<Integer> getFrameScore() {
-        return status.getFrameScore();
+        return state.getFrameScore();
     }
 
     private Optional<Integer> getPins() {
@@ -75,23 +74,23 @@ public class Frame implements IFrame {
     }
 
     private String getRoll1Report() {
-        return status.getRoll1Report();
+        return state.getRoll1Report();
     }
 
     private String getRoll2Report() {
-        return status.getRoll2Report();
+        return state.getRoll2Report();
     }
 
     private String getPartialScoreReport() {
-        return status.getPartialScoreReport();
+        return state.getPartialScoreReport();
     }
 
-    private void setStatus(Status status) {
-        this.status = status;
+    private void setState(State state) {
+        this.state = state;
         this.setPartialScore();
     }
 
-    // Status:
+    // State:
     // Empty
     // FirstRoll
     // JustOpen
@@ -102,8 +101,8 @@ public class Frame implements IFrame {
     // StrikeWitOneBonus
     // StrikeWithTwoBonuses
 
-    interface Status {
-        default void setNextStatus() {}
+    interface State {
+        default void setNextState() {}
 
         default void handle(Roll roll) {}
 
@@ -120,16 +119,16 @@ public class Frame implements IFrame {
         default String getPartialScoreReport() { return ""; }
     }
 
-    private class Empty implements Status {
-        public void setNextStatus() {
+    private class Empty implements State {
+        public void setNextState() {
             Optional<Integer> pins = getPins();
             if (pins.isEmpty()) {
                 return;
             }
-            Status nextStatus = pins.get().equals(10)
+            State nextStatus = pins.get().equals(10)
                     ? new Strike()
                     : new FirstRoll();
-            setStatus(nextStatus);
+            setState(nextStatus);
         }
 
         @Override
@@ -138,18 +137,18 @@ public class Frame implements IFrame {
         }
     }
 
-    private class FirstRoll implements Status {
+    private class FirstRoll implements State {
 
         @Override
-        public void setNextStatus() {
+        public void setNextState() {
             Optional<Integer> pins = getPins();
             if (pins.isEmpty()) {
                 return;
             }
-            Status nextStatus = pins.get().equals(10)
+            State nextStatus = pins.get().equals(10)
                     ? new Spare()
                     : new JustOpen();
-            setStatus(nextStatus);
+            setState(nextStatus);
         }
 
         @Override
@@ -163,11 +162,11 @@ public class Frame implements IFrame {
         }
     }
 
-    private class JustOpen implements Status {
+    private class JustOpen implements State {
         @Override
-        public void setNextStatus() {
-            Status nextStatus =  new Open();
-            setStatus(nextStatus);
+        public void setNextState() {
+            State nextStatus =  new Open();
+            setState(nextStatus);
         }
 
         @Override
@@ -189,7 +188,7 @@ public class Frame implements IFrame {
         }
     }
 
-    private class Open implements Status {
+    private class Open implements State {
 
         @Override
         public Optional<Integer> getFrameScore() {
@@ -215,10 +214,10 @@ public class Frame implements IFrame {
         }
     }
 
-    private class Spare implements Status {
+    private class Spare implements State {
         @Override
-        public void setNextStatus() {
-            setStatus( new SpareWithBonus());
+        public void setNextState() {
+            setState( new SpareWithBonus());
         }
 
         @Override
@@ -236,7 +235,7 @@ public class Frame implements IFrame {
         }
     }
 
-    private class SpareWithBonus implements Status {
+    private class SpareWithBonus implements State {
         @Override
         public Optional<Integer> getFrameScore() {
             return getPins();
@@ -260,10 +259,10 @@ public class Frame implements IFrame {
         }
     }
 
-    private class Strike implements Status {
+    private class Strike implements State {
         @Override
-        public void setNextStatus() {
-            setStatus( new StrikeWitOneBonus());
+        public void setNextState() {
+            setState( new StrikeWitOneBonus());
         }
 
         @Override
@@ -277,10 +276,10 @@ public class Frame implements IFrame {
         }
     }
 
-    private class StrikeWitOneBonus implements Status {
+    private class StrikeWitOneBonus implements State {
         @Override
-        public void setNextStatus() {
-            setStatus(new StrikeWithTwoBonuses());
+        public void setNextState() {
+            setState(new StrikeWithTwoBonuses());
         }
 
         @Override
@@ -298,7 +297,7 @@ public class Frame implements IFrame {
         }
     }
 
-    private class StrikeWithTwoBonuses implements Status {
+    private class StrikeWithTwoBonuses implements State {
         @Override
         public Optional<Integer> getFrameScore() {
             return getPins();
