@@ -25,4 +25,9 @@ public class NullFrame implements IFrame {
     @Override
     public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
     }
+
+    @Override
+    public int getPinsLeft(int previousPinsLeft) {
+        return previousPinsLeft;
+    }
 }

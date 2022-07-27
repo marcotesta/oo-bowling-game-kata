@@ -26,6 +26,11 @@ public class Roll implements IRoll {
 
     @Override
     public boolean isStrike() {
-        return pins.equals(10);
+        return pins.equals(MAX_PINS);
+    }
+
+    @Override
+    public int getPinsLeft() {
+        return MAX_PINS - pins;
     }
 }

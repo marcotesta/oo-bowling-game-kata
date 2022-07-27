@@ -9,4 +9,6 @@ public interface IFrame {
     int currentFrame(Integer previousFrameIndex);
 
     void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator);
+
+    int getPinsLeft(int previousPinsLeft);
 }

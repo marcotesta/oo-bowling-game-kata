@@ -382,4 +382,91 @@ public class GameTest {
         addRolls(new Integer[]{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10});
         assertEquals(300, game.getMaxPossibleScore());
     }
+
+    // Test PinsLeft
+
+    @Test
+    void testPinsLeftGivenNoRolls() {
+        assertEquals(10, game.getPinsLeft());
+    }
+
+    @Test
+    void testPinsLeftGivenOneRoll() {
+        addRolls(new Integer[]{6});
+        assertEquals(4, game.getPinsLeft());
+    }
+
+    @Test
+    void testPinsLeftGivenOneOpenFrame() {
+        addRolls(new Integer[]{6, 2});
+        assertEquals(10, game.getPinsLeft());
+    }
+
+    @Test
+    void testPinsLeftGivenOneOpenFrameAndARoll() {
+        addRolls(new Integer[]{6, 2, 3});
+        assertEquals(7, game.getPinsLeft());
+    }
+
+    @Test
+    void testPinsLeftGivenTwoOpenFrames() {
+        addRolls(new Integer[]{6, 2, 3, 2});
+        assertEquals(10, game.getPinsLeft());
+    }
+
+    @Test
+    void testPinsLeftGivenOneSpare() {
+        addRolls(new Integer[]{6, 4, 3, 2});
+        assertEquals(10, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenOneStrikeOneBonus() {
+        addRolls(new Integer[]{10, 4});
+        assertEquals(6, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenOneStrikeTwoBonuses() {
+        addRolls(new Integer[]{10, 4, 3});
+        assertEquals(10, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameEndingWithSpare() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 10, 10, 4, 6, 10});
+        assertEquals(0, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameEndingWithStrikeAndNoBonuses() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10});
+        assertEquals(10, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameEndingWithStrikeAndOneBonus() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5});
+        assertEquals(5, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameEndingWithStrikeAndOneBonusStrike() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 10});
+        assertEquals(10, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameEndingWithStrikeAndTwoBonuses() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 5, 2});
+        assertEquals(0, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameEndingWithStrikeAndFirstBonusStrikeAndSecondBonusRoll() {
+        addRolls(new Integer[]{6, 4, 6, 3, 10, 10, 5, 3, 6, 2, 7, 1, 4, 6, 4, 6, 10, 10, 2});
+        assertEquals(0, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletGameAllZero() {
+        addRolls(new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+        assertEquals(0, game.getPinsLeft());
+    }
+    @Test
+    void testPinsLeftGivenCompletPerfectGame() {
+        addRolls(new Integer[]{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10});
+        assertEquals(0, game.getPinsLeft());
+    }
 }

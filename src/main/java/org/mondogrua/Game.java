@@ -36,4 +36,8 @@ public class Game {
         framesHead.addPossibleScoreTo(maxPossibleScoreAccumulator);
         return maxPossibleScoreAccumulator.value().orElse(0);
     }
+
+    public int getPinsLeft() {
+        return framesHead.getPinsLeft(0);
+    }
 }

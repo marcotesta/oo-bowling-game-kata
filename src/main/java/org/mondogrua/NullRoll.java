@@ -15,11 +15,16 @@ public class NullRoll implements IRoll {
 
     @Override
     public void addPossibleScoreTo(ScoreAccumulator maxPossibleScoreAccumulator) {
-        maxPossibleScoreAccumulator.add(10);
+        maxPossibleScoreAccumulator.add(MAX_PINS);
     }
 
     @Override
     public boolean isStrike() {
         return false;
+    }
+
+    @Override
+    public int getPinsLeft() {
+        return MAX_PINS;
     }
 }
